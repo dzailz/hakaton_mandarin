@@ -1,3 +1,11 @@
 .idea
 SF_Mandarin_dataset_ver3.csv
 SF_Mandarin_dataset_processed.csv
+bankAds.csv
+bankBds.csv
+bankCds.csv
+bankDds.csv
+bankEds.csv
+preprocessed_dataset.csv
+models
+datasets
