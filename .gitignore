@@ -1,4 +1,6 @@
 .idea
+.pytest_cache
+__pycache__
 SF_Mandarin_dataset_ver3.csv
 SF_Mandarin_dataset_processed.csv
 bankAds.csv
