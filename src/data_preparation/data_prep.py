@@ -1,10 +1,9 @@
 import pandas as pd
-from scipy.stats import shapiro
+from scipy.stats import anderson
 from sklearn.preprocessing import StandardScaler
 
 from pandas import DataFrame
 import logging
-import warnings
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -28,7 +27,7 @@ class DataPreparation:
 
     def is_normality_distributed(self) -> dict:
         """
-        Check the normality of each numeric column in a DataFrame.
+        Check the normality of each numeric column in a DataFrame using the Anderson-Darling test.
         Returns:
         - dict: Dictionary of distribution for each numeric column
         """
@@ -37,24 +36,28 @@ class DataPreparation:
         distribution = dict.fromkeys(numeric_columns, None)
 
         for column in numeric_columns:
-            # Perform Shapiro-Wilk test for normality
-            stat, p_value = shapiro(self.df[column])
-            logger.info(f"Shapiro-Wilk test for '{column}':")
-            if p_value < 0.05 and stat > 0.50:
-                logger.info(f"For column: {column} P-value {p_value:.10f}, W-statistic: {stat:.4f}")
-                distribution[column] = {'is_normal': False, 'p_value': p_value, 'w_statistic': stat}
+            # Perform Anderson-Darling test for normality
+            logger.info(f"Performing Anderson-Darling test for '{column}'")
+            result = anderson(self.df[column])
+
+            logger.info(f"Anderson-Darling test for '{column}':")
+
+            if result.statistic <= result.critical_values[2]:
+                logger.info(f"For column: {column} A-statistic: {result.statistic:.4f}")
+                distribution[column] = {'is_normal': True, 'critical_values': result.critical_values.tolist(),
+                                        'statistic': result.statistic}
             else:
-                distribution[column] = {'is_normal': True, 'p_value': p_value, 'w_statistic': stat}
-                warnings.warn(f"The column {column} is normally distributed but others are not")
-                logger.info(f"The null hypothesis of normality is not rejected p-value {p_value:.3f}, "
-                            f"W-statistic: {stat:.4f}")
+                logger.info(f"For column: {column} A-statistic: {result.statistic:.4f}")
+                distribution[column] = {'is_normal': False, 'critical_values': result.critical_values.tolist(),
+                                        'statistic': result.statistic}
+
         return distribution
 
-    def transform_to_categorical(self, categorical_columns: list[str]) -> None:
+    def transform_to_categorical(self, columns: list[str]) -> None:
         """
         Transform the data to categorical
         """
-        for column in categorical_columns:
+        for column in columns:
             self.df[column] = self.df[column].astype('category')
 
     def drop_columns(self) -> None:
@@ -182,7 +185,7 @@ class DataPreparation:
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    df = pd.read_csv('../datasets/bankAds.csv', parse_dates=['BirthDate', 'JobStartDate'], index_col=0, dtype={
+    df = pd.read_csv('../../datasets/bankAds.csv', parse_dates=['BirthDate', 'JobStartDate'], index_col=0, dtype={
         'education': 'category',
         'employment status': 'category',
         'Value': 'category',
@@ -208,5 +211,3 @@ if __name__ == '__main__':
     bankA.normalize_numeric_features(is_new=False)
 
     bankA.save_df('../datasets/bankA_ohe_norm.csv')
-
-
