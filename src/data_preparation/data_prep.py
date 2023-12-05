@@ -175,17 +175,20 @@ class DataPreparation:
         else:
             self.df = df
 
-    def save_df(self, path: str, index: bool = False):
+    def save_df(self, path: str, index: bool = False, compression='gzip'):
         """
         Save the dataframe to csv
         """
-        self.df.to_csv(path, index=index, )
+        self.df.to_parquet(path, index=index, compression=compression)
 
 
 if __name__ == '__main__':
+    from os import path
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    df = pd.read_csv('../../datasets/bankAds.csv', parse_dates=['BirthDate', 'JobStartDate'], index_col=0, dtype={
+    df_path = path.join(path.dirname(__file__), '../../datasets/bankAds.csv')
+
+    df = pd.read_csv(df_path, parse_dates=['BirthDate', 'JobStartDate'], index_col=0, dtype={
         'education': 'category',
         'employment status': 'category',
         'Value': 'category',
@@ -209,5 +212,5 @@ if __name__ == '__main__':
     bankA.add_time_features()
     bankA.ohe_categorical_columns(is_new=False)
     bankA.normalize_numeric_features(is_new=False)
-
-    bankA.save_df('../datasets/bankA_ohe_norm.csv')
+    save_path = path.join(path.dirname(__file__), '../../datasets/bankA_ohe_norm.parquet')
+    bankA.save_df(save_path)
