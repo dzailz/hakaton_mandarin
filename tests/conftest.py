@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 from random import choice
 
-from src.data_preparation.data_prep import DataPreparation
+from src.data_preparation.data_preparation import DataPreparation
 
 NUM_SAMPLES = 500
 

@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 from scipy.stats import anderson
 from sklearn.preprocessing import StandardScaler
 
@@ -10,20 +11,78 @@ logger.setLevel(logging.INFO)
 
 
 class DataPreparation:
-    def __init__(self, df: DataFrame, to_drop_columns: list[str], bank: str):
+    def __init__(self, df: DataFrame, target_bank_col: str, to_drop_columns: list[str] | None = None, ):
         """
         :param df: dataframe to be cleaned for one bank
         :param to_drop_columns: columns to be dropped
-        :param bank: expected values: 'BankA', 'BankB' etc.
+        :param target_bank_col: expected values: 'BankA', 'BankB' etc.
         """
         self.df = df
         self.to_drop_columns = to_drop_columns
-        self.bank = bank
+        self.target_bank_col = target_bank_col
         self.cleared_df = None
-        self.condition_column = f'{self.bank}_decision'
         self.ohe_df = None
         self.df_no_outliers = None
         self.normalized_df = None
+
+    def drop_na(self):
+        """
+        Drop na values
+        """
+        self.df.dropna(inplace=True)
+
+    def index_as_int(self):
+        """
+        Set index as int
+        """
+        self.df.index = self.df.index.astype(int)
+
+    def drop_duplicates(self):
+        """
+        Drop duplicates
+        """
+        self.df.drop_duplicates(inplace=True)
+
+    def columns_to_lower(self):
+        """
+        Set columns to lower
+        """
+        self.df.columns = self.df.columns.str.lower()
+
+    @staticmethod
+    def to_snake_case(column):
+        column = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', column)
+        column = re.sub('__([A-Z])', r'_\1', column)
+        column = re.sub('([a-z0-9])([A-Z])', r'\1_\2', column)
+        return column.lower()
+
+    def convert_from_camel_case_to_snake_case(self):
+        """
+        Convert from camel case to snake case
+        """
+        self.columns_to_snake_case()
+        self.df.columns = self.df.columns.to_series().apply(self.to_snake_case)
+        self.columns_to_snake_case()
+
+    def columns_to_type(self, columns: list[str], dtype: str):
+        """
+        Set columns to type
+        """
+        for column in columns:
+            self.df[column] = self.df[column].astype(dtype)
+
+    def columns_to_snake_case(self):
+        """
+        Set columns to snake case
+        """
+        self.df.columns = self.df.columns.str.replace(' ', '_')
+
+    def columns_to_datetime(self, columns: list[str]):
+        """
+        Set columns to datetime
+        """
+        for column in columns:
+            self.df[column] = pd.to_datetime(self.df[column])
 
     def is_normality_distributed(self) -> dict:
         """
@@ -60,11 +119,11 @@ class DataPreparation:
         for column in columns:
             self.df[column] = self.df[column].astype('category')
 
-    def drop_columns(self) -> None:
+    def drop_columns(self, columns: list[str]) -> None:
         """
         Drop the columns
         """
-        self.df = self.df.drop(columns=self.to_drop_columns)
+        self.df = self.df.drop(columns=columns)
 
     def remove_outliers_all_numeric_with_condition(self, df: DataFrame | None = None, condition_value: str = 'success',
                                                    multiplier: float = 1.5, is_new: bool = True):
@@ -89,7 +148,7 @@ class DataPreparation:
         # Iterate through numeric columns and remove outliers using IQR method with the specified condition
         for column in numeric_columns:
             # Calculate IQR only for rows where the condition is met
-            condition_mask = (df_no_outliers[self.condition_column] == condition_value)
+            condition_mask = (df_no_outliers[self.target_bank_col] == condition_value)
             q1 = df_no_outliers.loc[condition_mask, column].quantile(0.25)
             q3 = df_no_outliers.loc[condition_mask, column].quantile(0.75)
             iqr = q3 - q1
@@ -112,13 +171,13 @@ class DataPreparation:
         is_drop: if True, then the time columns will be dropped
         Add age, job experience, job start year, and birth year features
         """
-        self.df['BirthYear'] = self.df['BirthDate'].dt.year
-        self.df['Age'] = pd.Timestamp.now().year - self.df['BirthYear']
-        self.df['JobStartYear'] = self.df['JobStartDate'].dt.year
-        self.df['JobExperience'] = pd.Timestamp.now().year - self.df['JobStartYear']
+        self.df['birth_year'] = self.df['birth_date'].dt.year
+        self.df['age'] = pd.Timestamp.now().year - self.df['birth_year']
+        self.df['job_start_year'] = self.df['job_start_date'].dt.year
+        self.df['job_experience'] = pd.Timestamp.now().year - self.df['job_start_year']
         if is_drop:
-            self.df.drop('JobStartDate', inplace=True, axis=1)
-            self.df.drop('BirthDate', inplace=True, axis=1)
+            self.df.drop('job_start_date', inplace=True, axis=1)
+            self.df.drop('birth_date', inplace=True, axis=1)
 
     def ohe_categorical_columns(self, df: DataFrame | None = None, columns: list[str] | None = None,
                                 is_new: bool = True):
@@ -128,15 +187,15 @@ class DataPreparation:
         if columns is None, then the default columns will be used
         the default columns are: [
                 'education',
-                'employment status',
-                'Gender',
-                'Family status',
-                'ChildCount',
-                'Loan_term',
-                'Goods_category',
-                'Value',
-                'SNILS',
-                'Merch_code'
+                'employment_status',
+                'gender',
+                'family_status',
+                'child_count',
+                'loan_term',
+                'goods_category',
+                'value',
+                'snils',
+                'merch_code'
             ]
         """
         if not df:
@@ -144,15 +203,15 @@ class DataPreparation:
         if not columns:
             columns = [
                 'education',
-                'employment status',
-                'Gender',
-                'Family status',
-                'ChildCount',
-                'Loan_term',
-                'Goods_category',
-                'Value',
-                'SNILS',
-                'Merch_code'
+                'employment_status',
+                'gender',
+                'family_status',
+                'child_count',
+                'loan_term',
+                'goods_category',
+                'value',
+                'snils',
+                'merch_code'
             ]
         if is_new:
             self.ohe_df = pd.get_dummies(df, columns=columns)
@@ -167,7 +226,7 @@ class DataPreparation:
         if df is None:
             df = self.df
         if columns is None:
-            columns = ['MonthProfit', 'MonthExpense', 'Loan_amount']
+            columns = ['month_profit', 'month_expense', 'loan_amount']
         scaler = StandardScaler()
         df[columns] = scaler.fit_transform(df[columns])
         if is_new:
@@ -177,40 +236,45 @@ class DataPreparation:
 
     def save_df(self, path: str, index: bool = False, compression='gzip'):
         """
-        Save the dataframe to csv
+        Save the data frame to parquet
         """
         self.df.to_parquet(path, index=index, compression=compression)
 
 
 if __name__ == '__main__':
     from os import path
+
+    banks = [f'bank_{i}_decision' for i in ['a', 'b', 'c', 'd', 'e']]
+    banks_to_drop = banks.copy()
+    banks_to_drop.remove('bank_a_decision')
+
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    df_path = path.join(path.dirname(__file__), '../../datasets/bankAds.csv')
+    df_path = path.join(path.dirname(__file__), '../../data/datasets/SF_Mandarin_dataset_ver3.csv')
 
-    df = pd.read_csv(df_path, parse_dates=['BirthDate', 'JobStartDate'], index_col=0, dtype={
-        'education': 'category',
-        'employment status': 'category',
-        'Value': 'category',
-        'MonthProfit': 'UInt64',
-        'MonthExpense': 'UInt64',
-        'Gender': 'category',
-        'Family status': 'category',
-        'ChildCount': 'category',
-        'SNILS': 'category',
-        'BankB_decision': 'category',
-        'Merch_code': 'category',
-        'Loan_amount': 'UInt64',
-        'Loan_term': 'category',
-        'Goods_category': 'category'
-    })
+    df = pd.read_csv(df_path, sep=';', index_col=0)
 
-    bankA = DataPreparation(df=df,
-                            to_drop_columns=['BankA_decision', 'BankC_decision', 'BankD_decision', 'BankE_decision'],
-                            bank='BankA')
-    bankA.remove_outliers_all_numeric_with_condition(is_new=False)
-    bankA.add_time_features()
-    bankA.ohe_categorical_columns(is_new=False)
-    bankA.normalize_numeric_features(is_new=False)
-    save_path = path.join(path.dirname(__file__), '../../datasets/bankA_ohe_norm.parquet')
-    bankA.save_df(save_path)
+    bank_a = DataPreparation(
+        df=df,
+        to_drop_columns=banks_to_drop,
+        target_bank_col=[i for i in banks if i not in banks_to_drop][0]
+    )
+    bank_a.drop_na()
+    bank_a.index_as_int()
+    bank_a.drop_duplicates()
+    bank_a.convert_from_camel_case_to_snake_case()
+    bank_a.columns_to_datetime(columns=['job_start_date', 'birth_date'])
+
+    bank_a.columns_to_type(columns=['month_profit', 'month_expense', 'loan_amount'], dtype='UInt64')
+
+    bank_a.columns_to_type(columns=['snils', 'gender', 'merch_code', 'child_count', 'loan_term'], dtype='UInt8')
+    bank_a.columns_to_type(
+        columns=['family_status', 'goods_category', 'position', 'employment_status', 'education', 'snils',
+                 'gender'], dtype='category')
+
+    bank_a.remove_outliers_all_numeric_with_condition(is_new=False)
+    bank_a.add_time_features()
+    bank_a.ohe_categorical_columns(is_new=False)
+    bank_a.normalize_numeric_features(is_new=False)
+    save_path = path.join(path.dirname(__file__), '../../data/datasets/bankA_ohe_norm.parquet')
+    bank_a.save_df(save_path)

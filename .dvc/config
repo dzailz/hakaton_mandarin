@@ -1,5 +1,2 @@
 [core]
-    remote = minio
-['remote "minio"']
-    url = s3://hakaton
-    endpointurl = https://minio.dzailz.su
+    autostage = true

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from src.data_preparation.data_prep import DataPreparation
+from src.data_preparation.data_preparation import DataPreparation
 
 
 class TestDataPreparation:
