@@ -1,4 +1,5 @@
 [core]
+    autostage = true
     remote = minio
 ['remote "minio"']
     url = s3://hakaton
