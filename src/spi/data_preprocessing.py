@@ -24,6 +24,10 @@ class DataPreprocessing(DataPreparation):
         self.all_categorical_columns = self.categorical_columns.copy()
         self.all_categorical_columns.extend(self.numeric_cartegorical_columns)
 
+    def drop_errors(self, columns=list[str], value='error'):
+        for column in columns:
+            self.drop_values(column=column, value=value)
+
     def preparation_full_df(self, save_path: str | None = None):
         """
         This method is responsible for preparing the full dataframe for further processing.
@@ -48,6 +52,7 @@ class DataPreprocessing(DataPreparation):
         # Drop duplicate rows from the dataframe
         self.drop_duplicates()
 
+        self.drop_errors()
         # Convert column names from camel case to snake case
         self.convert_from_camel_case_to_snake_case()
 
@@ -166,4 +171,3 @@ if __name__ == '__main__':
 
     dpp.preparation_full_df(save_path=full_prepared_save_path)
     dpp.final_preparation(save_path=one_bank_prepared_save_path)
-

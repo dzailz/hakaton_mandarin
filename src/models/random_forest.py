@@ -60,8 +60,8 @@ class RandomForest(RandomForestClassifier):
         self.convert_datetime_to_numeric(df=df, non_numeric_columns=non_numeric_columns)
 
         # Separate features and target variable
-        X = df.drop('BankA_decision', axis=1)
-        y = df['BankA_decision']
+        X = df.drop('bank_a_decision', axis=1)
+        y = df['bank_a_decision']
 
         # Apply SMOTE after scaling numerical features
         scaler = StandardScaler()
@@ -93,9 +93,10 @@ if __name__ == '__main__':
     import pickle
     from os import path
 
-    df_path = path.join(path.dirname(__file__), '../../datasets/bankA_ohe_norm.parquet')
+    df_path = path.join(path.dirname(__file__), '../../data/datasets/prepared_one_bank.parquet')
 
     df = pd.read_parquet(df_path)
+    df.drop('position', axis=1, inplace=True)
 
     for n_estimators in (50, 100, 150):
         with Live() as live:
@@ -105,8 +106,6 @@ if __name__ == '__main__':
             rf.split_data()
 
             rf.fit(rf.X_train, rf.y_train)
-            model_path = path.join(path.dirname(__file__), f'../../models/random_forest_{n_estimators}.pkl')
-            pickle.dump(rf, open(model_path, 'wb'))
 
             y_train_pred = rf.predict(rf.X_train)
 
@@ -127,3 +126,7 @@ if __name__ == '__main__':
             live.log_sklearn_plot(
                 "confusion_matrix", rf.y_test, y_test_pred, name="test/confusion_matrix",
                 title="Test Confusion Matrix")
+
+            model_path = path.join(path.dirname(__file__),
+                                   f'../../data/trained_models/random_forest_{n_estimators}.pkl')
+            pickle.dump(rf, open(model_path, 'wb'))

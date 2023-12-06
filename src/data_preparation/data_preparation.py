@@ -84,6 +84,21 @@ class DataPreparation:
         for column in columns:
             self.df[column] = pd.to_datetime(self.df[column])
 
+    def drop_values(self, column: str, value: str = 'error'):
+        """
+        This method replaces a specified value in a given column with NA (Not Available), and then drops these NA values.
+        This is typically used to handle error values in the data that are not useful for analysis or modeling.
+
+        Parameters:
+        column (str): The name of the column in the dataframe where the specified value should be replaced.
+        value (str, default='error'): The value to be replaced with NA in the specified column.
+
+        Returns:
+        None: The method operates on the dataframe in-place and does not return anything.
+        """
+        self.df[column] = self.df[column].replace(value, pd.NA)
+        self.df.dropna(inplace=True)
+
     def is_normality_distributed(self) -> dict:
         """
         Check the normality of each numeric column in a DataFrame using the Anderson-Darling test.
