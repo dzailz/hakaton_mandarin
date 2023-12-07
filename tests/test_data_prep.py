@@ -9,11 +9,11 @@ class TestDataPreparation:
         distribution = normal_data_preparation.is_normality_distributed()
 
         # Check the output
-        assert 'Age' in distribution, "Age is a numeric column, but was not included in the output"
-        assert distribution['Age'][
+        assert 'age' in distribution, "Age is a numeric column, but was not included in the output"
+        assert distribution['age'][
                    'is_normal'] == True, f"Age is normally distributed, but the output is {distribution['Age']['is_normal']}"
-        assert 'Income' in distribution, "Income is a numeric column, but was not included in the output"
-        assert distribution['Income'][
+        assert 'income' in distribution, "Income is a numeric column, but was not included in the output"
+        assert distribution['income'][
                    'is_normal'] == True, f"Income is normally distributed, but the output is {distribution['Income']['is_normal']}"
 
     def test_is_not_normality_distributed(self, lognormal_data_preparation):
@@ -36,47 +36,47 @@ class TestDataPreparation:
 
     def test_transform_to_categorical(self, normal_data_preparation):
         # Call the transform_to_categorical method
-        normal_data_preparation.transform_to_categorical(['Education'])
+        normal_data_preparation.transform_to_categorical(['education'])
         # Check if the column has been transformed to categorical
         categorical_columns = normal_data_preparation.df.select_dtypes(include='category').columns
-        assert 'Education' in categorical_columns, "Education is a categorical column, but was not included in the output"
+        assert 'education' in categorical_columns, "Education is a categorical column, but was not included in the output"
 
     def test_drop_columns(self, normal_data_preparation):
         # Call the drop_columns method
-        normal_data_preparation.drop_columns()
+        normal_data_preparation.drop_columns(columns=['education', 'bank_decision'])
 
         # Check if the 'Decision' column has been dropped
-        assert 'Decision' not in normal_data_preparation.df.columns
+        assert 'decision' not in normal_data_preparation.df.columns
 
     def test_add_time_features(self):
         # Create a sample DataFrame
         data = {
-            'BirthDate': pd.date_range(start='1990-01-01', periods=3),
-            'JobStartDate': pd.date_range(start='2010-01-01', periods=3)
+            'birth_date': pd.date_range(start='1990-01-01', periods=3),
+            'job_start_date': pd.date_range(start='2010-01-01', periods=3)
         }
         df = pd.DataFrame(data)
 
         # Create an instance of DataPreparation
-        data_prep = DataPreparation(df=df, to_drop_columns=[], bank='Bank')
+        data_prep = DataPreparation(df=df, to_drop_columns=[], target_bank_col='Bank')
 
         # Call the add_time_features method
         data_prep.add_time_features()
 
         # Check if the time features are added correctly
-        assert 'BirthYear' in data_prep.df.columns
-        assert 'Age' in data_prep.df.columns
-        assert 'JobStartYear' in data_prep.df.columns
-        assert 'JobExperience' in data_prep.df.columns
+        assert 'birth_year' in data_prep.df.columns
+        assert 'age' in data_prep.df.columns
+        assert 'job_start_year' in data_prep.df.columns
+        assert 'job_experience' in data_prep.df.columns
 
         # Check if the original time columns are dropped
-        assert 'BirthDate' not in data_prep.df.columns
-        assert 'JobStartDate' not in data_prep.df.columns
+        assert 'birth_date' not in data_prep.df.columns
+        assert 'job_start_date' not in data_prep.df.columns
 
         # Check the values of the time features
-        assert data_prep.df['BirthYear'].tolist() == [1990, 1990, 1990]
-        assert data_prep.df['Age'].tolist() == [33, 33, 33]
-        assert data_prep.df['JobStartYear'].tolist() == [2010, 2010, 2010]
-        assert data_prep.df['JobExperience'].tolist() == [13, 13, 13]
+        assert data_prep.df['birth_year'].tolist() == [1990, 1990, 1990]
+        assert data_prep.df['age'].tolist() == [33, 33, 33]
+        assert data_prep.df['job_start_year'].tolist() == [2010, 2010, 2010]
+        assert data_prep.df['job_experience'].tolist() == [13, 13, 13]
 
     def test_normalize_numeric_features(self, lognormal_data_preparation):
         # Call the normalize_numeric_features method
@@ -95,17 +95,18 @@ class TestDataPreparation:
     def test_ohe_categorical_columns_default_columns(self):
         # Create a sample DataFrame
         data = {'education': ['Bachelor', 'Master', 'PhD', 'Bachelor'],
-                'employment status': ['Employed', 'Unemployed', 'Employed', 'Employed'],
-                'Gender': ['Man', 'Woman', 'Man', 'Woman'],
-                'Family status': ['Married', 'Single', 'Married', 'Single'],
-                'ChildCount': [0, 1, 0, 3],
-                'Loan_term': [6, 12, 18, 24],
-                'Goods_category': ['Electronics', 'Furniture', 'Electronics', 'Education'],
-                'Value': [1, 3, 2, 4],
-                'SNILS': [1, 0, 1, 0],
-                'Merch_code': [111, 222, 333, 444],
+                'employment_status': ['Employed', 'Unemployed', 'Employed', 'Employed'],
+                'gender': ['Man', 'Woman', 'Man', 'Woman'],
+                'family_status': ['Married', 'Single', 'Married', 'Single'],
+                'child_count': [0, 1, 0, 3],
+                'loan_term': [6, 12, 18, 24],
+                'goods_category': ['Electronics', 'Furniture', 'Electronics', 'Education'],
+                'value': [1, 3, 2, 4],
+                'snils': [1, 0, 1, 0],
+                'merch_code': [111, 222, 333, 444],
+                'bank': ['Bank1', 'Bank2', 'Bank3', 'Bank4']
                 }
-        data_prep = DataPreparation(df=pd.DataFrame(data), to_drop_columns=[], bank='Bank')
+        data_prep = DataPreparation(df=pd.DataFrame(data), to_drop_columns=[], target_bank_col='bank')
         data_prep.ohe_categorical_columns()
         # Check if the categorical columns are one-hot encoded
         assert 'education' not in data_prep.ohe_df.columns
@@ -124,7 +125,7 @@ class TestDataPreparation:
         assert isinstance(data_prep.ohe_df, pd.DataFrame)
 
     def test_ohe_categorical_columns_custom_columns(self, normal_data_preparation):
-        normal_data_preparation.ohe_categorical_columns(columns=['Education', 'Bank_decision'], is_new=True)
+        normal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=True)
 
         # Check if the custom categorical columns are one-hot encoded
         assert 'Education' not in normal_data_preparation.ohe_df.columns
