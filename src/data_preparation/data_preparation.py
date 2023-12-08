@@ -197,7 +197,6 @@ class DataPreparation:
 
     def ohe_categorical_columns(self, df: DataFrame | None = None, columns: list[str] | None = None,
                                 is_new: bool = True):
-
         """
         One hot encode categorical columns
         if columns is None, then the default columns will be used
