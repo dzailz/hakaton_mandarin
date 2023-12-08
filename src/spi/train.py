@@ -7,21 +7,21 @@ from box import ConfigBox
 from ruamel.yaml import YAML
 from sklearn.metrics import classification_report, f1_score, roc_auc_score
 
-from settings import DVC_PARAMS_FILE
+from settings import DVC_PARAMS_FILE, MODELS_FOLDER, DATASETS_FOLDER, RESULTS_FOLDER
 from src.models.common.split import data_split
 from src.models.random_forest.random_forest import RandomForest
 
 yaml = YAML(typ='safe')
-params_path = DVC_PARAMS_FILE
-params = ConfigBox(yaml.load(open(Path(params_path))))
+
+params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
 
 RANDOM_SEED = params.base.random_seed
-N_ESTIMATORS = params.train.random_forest.n_estimators
+N_ESTIMATORS = list(params.train.random_forest.n_estimators)
 
 
 def train_predict_rf(df: pd.DataFrame):
     for n_estimators in N_ESTIMATORS:
-        with Live() as live:
+        with Live(dir=RESULTS_FOLDER) as live:
             live.log_param("n_estimators", n_estimators)
             rf = RandomForest(df=df, n_estimators=n_estimators)
             rf.add_smote()
@@ -49,13 +49,20 @@ def train_predict_rf(df: pd.DataFrame):
                 "confusion_matrix", y_test, y_test_pred, name="test/confusion_matrix",
                 title="Test Confusion Matrix")
 
-            model_path = Path(f'data/trained_models/random_forest_{n_estimators}.pkl')
+            model_path = Path(MODELS_FOLDER, f'random_forest_{n_estimators}.pkl')
             pickle.dump(rf, open(model_path, 'wb'))
-            live.log_artifact(model_path)
+            live.log_artifact(
+                path=model_path,
+                type="model",
+                name=f"random_forest_{n_estimators}.pkl",
+                labels=[n_estimators, "random_forest"]
+
+            )
 
 
 if __name__ == '__main__':
-    df_path = Path('data/datasets/prepared_one_bank.parquet')
+    df_path = Path(DATASETS_FOLDER, 'prepared_one_bank.parquet')
+
     df = pd.read_parquet(df_path)
     df.drop('position', axis=1, inplace=True)
 
