@@ -146,13 +146,23 @@ class DataPreprocessing(DataPreparation):
 if __name__ == '__main__':
     from os import path
     from pandas import read_csv
+    from settings import DVC_PARAMS_FILE
+    from box import ConfigBox
+    from pathlib import Path
+
+    from ruamel.yaml import YAML
+
+    yaml = YAML(typ='safe')
+
+    params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
 
     load_path = path.abspath(path.join(__file__, '../../../data/datasets/SF_Mandarin_dataset_ver3.csv'))
     full_prepared_save_path = path.abspath(path.join(__file__, '../../../data/datasets/prepared_full.parquet'))
 
-    categorical_columns = ['family_status', 'goods_category', 'position', 'employment_status', 'education']
-    numeric_categorical_columns = ['snils', 'gender', 'merch_code', 'child_count', 'loan_term']
-    money_columns = ['month_profit', 'month_expense', 'loan_amount']
+    categorical_columns = list(params.preprocess.categorical_columns)
+    numeric_categorical_columns = list(params.preprocess.numeric_categorical_columns)
+    money_columns = list(params.preprocess.money_columns)
+
     banks_cols = [f'bank_{i}_decision' for i in ['a', 'b', 'c', 'd', 'e']]
 
     for i in ['a', 'b', 'c', 'd', 'e']:
