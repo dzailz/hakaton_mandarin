@@ -1,6 +1,5 @@
 from typing import Any
 from box import ConfigBox
-from os import path
 
 from ruamel.yaml import YAML
 from pathlib import Path
@@ -10,8 +9,7 @@ from settings import DVC_PARAMS_FILE
 
 yaml = YAML(typ='safe')
 
-params_path = DVC_PARAMS_FILE
-params = ConfigBox(yaml.load(open(Path(params_path))))
+params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
 
 RANDOM_SEED = params.base.random_seed
 TEST_SIZE = params.base.test_size
