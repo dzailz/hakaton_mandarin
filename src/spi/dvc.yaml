@@ -1,0 +1,21 @@
+params:
+- ../../results/params.yaml
+metrics:
+- ../../results/metrics.json
+plots:
+- ../../results/plots/metrics:
+    x: step
+- ../../results/plots/sklearn/train/confusion_matrix.json:
+    template: confusion
+    x: actual
+    y: predicted
+    title: Train Confusion Matrix
+    x_label: True Label
+    y_label: Predicted Label
+- ../../results/plots/sklearn/test/confusion_matrix.json:
+    template: confusion
+    x: actual
+    y: predicted
+    title: Test Confusion Matrix
+    x_label: True Label
+    y_label: Predicted Label
