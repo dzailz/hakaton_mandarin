@@ -7,11 +7,13 @@ from box import ConfigBox
 from ruamel.yaml import YAML
 from sklearn.metrics import classification_report, f1_score, roc_auc_score
 
+from settings import DVC_PARAMS_FILE
 from src.models.common.split import data_split
 from src.models.random_forest.random_forest import RandomForest
 
 yaml = YAML(typ='safe')
-params = ConfigBox(yaml.load(open('params.yaml')))
+params_path = DVC_PARAMS_FILE
+params = ConfigBox(yaml.load(open(Path(params_path))))
 
 RANDOM_SEED = params.base.random_seed
 N_ESTIMATORS = params.train.random_forest.n_estimators
