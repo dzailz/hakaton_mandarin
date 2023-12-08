@@ -24,11 +24,35 @@ N_ESTIMATORS = list(params.train.random_forest.n_estimators)
 
 
 def train_predict_rf(df: pd.DataFrame):
+    """
+    This function trains and predicts a Random Forest model on the given DataFrame.
+
+    Parameters:
+    df (pd.DataFrame): The DataFrame to be used for training and prediction.
+
+    The function iterates over a list of n_estimators, and for each n_estimator:
+    - Logs the current n_estimator being used.
+    - Initializes a Random Forest model with the current n_estimator.
+    - Applies SMOTE to the data.
+    - Splits the data into training and testing sets.
+    - Fits the model on the training data.
+    - Makes predictions on the training data.
+    - Calculates and logs the classification report, f1 score, and ROC AUC score for the training data.
+    - Logs a confusion matrix plot for the training data.
+    - Makes predictions on the testing data.
+    - Calculates and logs the classification report, f1 score, and ROC AUC score for the testing data.
+    - Logs a confusion matrix plot for the testing data.
+    - Saves the trained model as a pickle file.
+    - Logs the model as an artifact.
+
+    """
     for n_estimators in N_ESTIMATORS:
         logger.info(f"Training Random Forest with {n_estimators} estimators")
         with Live(dir=RESULTS_FOLDER, dvcyaml=DVC_YAML_FILE) as live:
             live.log_param("n_estimators", n_estimators)
+
             rf = RandomForest(df=df, n_estimators=n_estimators)
+
             rf.add_smote()
             X_train, X_test, y_train, y_test = data_split(rf.X_resampled, rf.y_resampled)
 
@@ -74,7 +98,6 @@ def train_predict_rf(df: pd.DataFrame):
                 type="model",
                 name=f"random_forest_{n_estimators}.pkl",
                 labels=[n_estimators, "random_forest"]
-
             )
 
 
