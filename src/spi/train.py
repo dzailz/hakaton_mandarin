@@ -1,5 +1,6 @@
 import pandas as pd
 import pickle
+import logging
 
 from pathlib import Path
 from dvclive import Live
@@ -7,9 +8,12 @@ from box import ConfigBox
 from ruamel.yaml import YAML
 from sklearn.metrics import classification_report, f1_score, roc_auc_score
 
-from settings import DVC_PARAMS_FILE, MODELS_FOLDER, DATASETS_FOLDER, RESULTS_FOLDER
+from settings import DVC_PARAMS_FILE, MODELS_FOLDER, DATASETS_FOLDER, RESULTS_FOLDER, DVC_YAML_FILE
 from src.models.common.split import data_split
 from src.models.random_forest.random_forest import RandomForest
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 yaml = YAML(typ='safe')
 
@@ -21,7 +25,8 @@ N_ESTIMATORS = list(params.train.random_forest.n_estimators)
 
 def train_predict_rf(df: pd.DataFrame):
     for n_estimators in N_ESTIMATORS:
-        with Live(dir=RESULTS_FOLDER) as live:
+        logger.info(f"Training Random Forest with {n_estimators} estimators")
+        with Live(dir=RESULTS_FOLDER, dvcyaml=DVC_YAML_FILE) as live:
             live.log_param("n_estimators", n_estimators)
             rf = RandomForest(df=df, n_estimators=n_estimators)
             rf.add_smote()
@@ -30,10 +35,16 @@ def train_predict_rf(df: pd.DataFrame):
             rf.fit(X_train, y_train)
 
             y_train_pred = rf.predict(X_train)
+            classification_report_train = classification_report(y_train, y_train_pred, output_dict=True)
+            f1_score_train = f1_score(y_train, y_train_pred, average="weighted")
+            roc_auc_score_train = roc_auc_score(y_train, rf.predict_proba(X_train)[:, 1])
 
-            live.log_metric("train/classification_report", classification_report(y_train, y_train_pred), plot=True)
-            live.log_metric("train/f1", f1_score(y_train, y_train_pred, average="weighted"), plot=True)
-            live.log_metric("ROC_AUC", roc_auc_score(y_train, rf.predict_proba(X_train)[:, 1]), plot=True)
+            live.log_metric("train/classification_report", classification_report_train, plot=True)
+            logger.info(f"Train classification report: {classification_report_train}")
+            live.log_metric("train/f1", f1_score_train, plot=True)
+            logger.info(f"Train f1 score: {f1_score_train}")
+            live.log_metric("ROC_AUC", roc_auc_score_train, plot=True)
+            logger.info(f"Train ROC AUC score: {roc_auc_score_train}")
 
             live.log_sklearn_plot(
                 "confusion_matrix", y_train, y_train_pred, name="train/confusion_matrix",
@@ -41,9 +52,16 @@ def train_predict_rf(df: pd.DataFrame):
 
             y_test_pred = rf.predict(X_test)
 
-            live.log_metric("test/classification_report", classification_report(y_test, y_test_pred), plot=False)
-            live.log_metric("test/f1", f1_score(y_test, y_test_pred, average="weighted"), plot=False)
-            live.log_metric("ROC_AUC", roc_auc_score(y_test, rf.predict_proba(X_test)[:, 1]), plot=False)
+            classification_report_test = classification_report(y_test, y_test_pred, output_dict=True)
+            f1_score_test = f1_score(y_test, y_test_pred, average="weighted")
+            roc_auc_score_test = roc_auc_score(y_test, rf.predict_proba(X_test)[:, 1])
+
+            live.log_metric("test/classification_report", classification_report_test, plot=True)
+            logger.info(f"Test classification report: {classification_report_test}")
+            live.log_metric("test/f1", f1_score_test, plot=True)
+            logger.info(f"Test f1 score: {f1_score_test}")
+            live.log_metric("ROC_AUC", roc_auc_score_test, plot=True)
+            logger.info(f"Test ROC AUC score: {roc_auc_score_test}")
 
             live.log_sklearn_plot(
                 "confusion_matrix", y_test, y_test_pred, name="test/confusion_matrix",
