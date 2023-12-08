@@ -38,10 +38,10 @@ def normal_dist_age() -> np.ndarray:
 def normal_data(normal_dist_income, normal_dist_age) -> pd.DataFrame:
     # Create synthetic data for the DataFrame
     data = {
-        'Age': normal_dist_age,
-        'Income': normal_dist_income,
-        'Education': [choice(['Bachelor', 'Master', 'PhD', 'Bachelor']) for _ in range(NUM_SAMPLES)],
-        'Bank_decision': [choice(['declined', 'approved']) for _ in range(NUM_SAMPLES)]
+        'age': normal_dist_age,
+        'income': normal_dist_income,
+        'education': [choice(['Bachelor', 'Master', 'PhD', 'Bachelor']) for _ in range(NUM_SAMPLES)],
+        'bank_decision': [choice(['declined', 'approved']) for _ in range(NUM_SAMPLES)]
     }
 
     # Convert the data dictionary to a Pandas DataFrame
@@ -62,10 +62,10 @@ def lognormal_data() -> pd.DataFrame:
 
     # Create synthetic data for the DataFrame
     data = {
-        'Age': [choice(range(18, 65)) for _ in range(num_samples)],
-        'Income': income_samples,
-        'Education': ['Bachelor', 'Master', 'PhD', 'Bachelor'] * (num_samples // 4),
-        'Bank_decision': [choice(['declined', 'approved']) for _ in range(num_samples)]
+        'age': [choice(range(18, 65)) for _ in range(num_samples)],
+        'income': income_samples,
+        'education': ['Bachelor', 'Master', 'PhD', 'Bachelor'] * (num_samples // 4),
+        'bank_decision': [choice(['declined', 'approved']) for _ in range(num_samples)]
     }
 
     # Convert the data dictionary to a Pandas DataFrame
@@ -76,10 +76,10 @@ def lognormal_data() -> pd.DataFrame:
 
 @pytest.fixture()
 def normal_data_preparation(normal_data) -> DataPreparation:
-    return DataPreparation(df=normal_data, to_drop_columns=[], bank='Bank')
+    return DataPreparation(df=normal_data, to_drop_columns=[], target_bank_col='Bank')
 
 
 @pytest.fixture()
 def lognormal_data_preparation(lognormal_data) -> DataPreparation:
-    return DataPreparation(df=lognormal_data, to_drop_columns=[], bank='Bank')
+    return DataPreparation(df=lognormal_data, to_drop_columns=[], target_bank_col='Bank')
 
