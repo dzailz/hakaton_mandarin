@@ -24,6 +24,7 @@ class DataPreparation:
         self.ohe_df = None
         self.df_no_outliers = None
         self.normalized_df = None
+        self.scaler = StandardScaler()
 
     def drop_na(self):
         """
@@ -236,14 +237,14 @@ class DataPreparation:
     def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
                                    is_new: bool = True):
         """
-        Normalize numeric columns
+        Normalize numeric columns using StandardScaler
+        Scaler is available in self.scaler
         """
         if df is None:
             df = self.df
         if columns is None:
             columns = ['month_profit', 'month_expense', 'loan_amount']
-        scaler = StandardScaler()
-        df[columns] = scaler.fit_transform(df[columns])
+        df[columns] = self.scaler.fit_transform(df[columns])
         if is_new:
             self.normalized_df = df
         else:
