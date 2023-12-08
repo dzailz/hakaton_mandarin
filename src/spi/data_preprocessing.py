@@ -83,7 +83,8 @@ class DataPreprocessing(DataPreparation):
             condition_value: str = 'success',
             multiplier: float = 1.5,
             is_origin_time_column_drop=True,
-            ohe_columns: list[str] | None = None
+            ohe_columns: list[str] | None = None,
+            is_normalized: bool = True
     ):
         """
         This method is responsible for the final preparation of the dataframe. It performs several operations such as
@@ -131,8 +132,8 @@ class DataPreprocessing(DataPreparation):
         # One-hot encode specified columns or all categorical columns if no columns are specified
         self.ohe_categorical_columns(is_new=False, columns=ohe_columns)
 
-        # Normalize all numeric features in the dataframe
-        self.normalize_numeric_features(is_new=False, columns=self.money_columns)
+        if is_normalized:
+            self.normalize_numeric_features(is_new=False, columns=self.money_columns)
 
         # If save_path is provided, save the dataframe to the specified path
         if save_path:
