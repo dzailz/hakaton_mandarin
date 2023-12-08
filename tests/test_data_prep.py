@@ -11,22 +11,22 @@ class TestDataPreparation:
         # Check the output
         assert 'age' in distribution, "Age is a numeric column, but was not included in the output"
         assert distribution['age'][
-                   'is_normal'] == True, f"Age is normally distributed, but the output is {distribution['Age']['is_normal']}"
+                   'is_normal'] == True, f"Age is normally distributed, but the output is {distribution['age']['is_normal']}"
         assert 'income' in distribution, "Income is a numeric column, but was not included in the output"
         assert distribution['income'][
-                   'is_normal'] == True, f"Income is normally distributed, but the output is {distribution['Income']['is_normal']}"
+                   'is_normal'] == True, f"Income is normally distributed, but the output is {distribution['income']['is_normal']}"
 
     def test_is_not_normality_distributed(self, lognormal_data_preparation):
         # Call the is_normality_distributed method
         distribution = lognormal_data_preparation.is_normality_distributed()
 
         # Check the output
-        assert 'Age' in distribution, "Age is a numeric column, but was not included in the output"
-        assert distribution['Age'][
-                   'is_normal'] == False, f"Age is normally distributed, but the output is {distribution['Age'][0]}"
-        assert 'Income' in distribution, "Income is a numeric column, but was not included in the output"
-        assert distribution['Income'][
-                   'is_normal'] == False, f"Income is normally distributed, but the output is {distribution['Income'][0]}"
+        assert 'age' in distribution, "age is a numeric column, but was not included in the output"
+        assert distribution['age'][
+                   'is_normal'] == False, f"Age is normally distributed, but the output is {distribution['age'][0]}"
+        assert 'income' in distribution, "income is a numeric column, but was not included in the output"
+        assert distribution['income'][
+                   'is_normal'] == False, f"Income is normally distributed, but the output is {distribution['income'][0]}"
 
     def test_no_numeric_columns_is_not_in_output(self, normal_data_preparation):
         # Call the is_normality_distributed method
@@ -80,17 +80,17 @@ class TestDataPreparation:
 
     def test_normalize_numeric_features(self, lognormal_data_preparation):
         # Call the normalize_numeric_features method
-        lognormal_data_preparation.normalize_numeric_features(columns=['Age', 'Income'])
+        lognormal_data_preparation.normalize_numeric_features(columns=['age', 'income'])
 
         # Check if the numeric columns are normalized
-        assert 'Age' in lognormal_data_preparation.df.columns
-        assert 'Income' in lognormal_data_preparation.df.columns
+        assert 'age' in lognormal_data_preparation.df.columns
+        assert 'income' in lognormal_data_preparation.df.columns
 
         # Check if the values in the numeric columns are normalized
-        assert np.isclose(lognormal_data_preparation.df['Age'].mean(), 0, atol=1e-2)
-        assert np.isclose(lognormal_data_preparation.df['Age'].std(), 1, atol=1e-2)
-        assert np.isclose(lognormal_data_preparation.df['Income'].mean(), 0, atol=1e-2)
-        assert np.isclose(lognormal_data_preparation.df['Income'].std(), 1, atol=1e-2)
+        assert np.isclose(lognormal_data_preparation.df['age'].mean(), 0, atol=1e-2)
+        assert np.isclose(lognormal_data_preparation.df['age'].std(), 1, atol=1e-2)
+        assert np.isclose(lognormal_data_preparation.df['income'].mean(), 0, atol=1e-2)
+        assert np.isclose(lognormal_data_preparation.df['income'].std(), 1, atol=1e-2)
 
     def test_ohe_categorical_columns_default_columns(self):
         # Create a sample DataFrame
@@ -128,15 +128,15 @@ class TestDataPreparation:
         normal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=True)
 
         # Check if the custom categorical columns are one-hot encoded
-        assert 'Education' not in normal_data_preparation.ohe_df.columns
-        assert 'Bank_decision' not in normal_data_preparation.ohe_df.columns
+        assert 'education' not in normal_data_preparation.ohe_df.columns
+        assert 'bank_decision' not in normal_data_preparation.ohe_df.columns
 
         # Check if the new DataFrame with one-hot encoded columns is stored in ohe_df attribute
         assert hasattr(normal_data_preparation, 'ohe_df')
         assert isinstance(normal_data_preparation.ohe_df, pd.DataFrame)
 
     def test_ohe_categorical_columns_existing_df(self, lognormal_data_preparation):
-        lognormal_data_preparation.ohe_categorical_columns(columns=['Education', 'Bank_decision'], is_new=False)
+        lognormal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=False)
 
         # Check if the categorical columns are one-hot encoded
         assert 'Education' not in lognormal_data_preparation.df.columns

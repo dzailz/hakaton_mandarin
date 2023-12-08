@@ -62,10 +62,10 @@ def lognormal_data() -> pd.DataFrame:
 
     # Create synthetic data for the DataFrame
     data = {
-        'Age': [choice(range(18, 65)) for _ in range(num_samples)],
-        'Income': income_samples,
-        'Education': ['Bachelor', 'Master', 'PhD', 'Bachelor'] * (num_samples // 4),
-        'Bank_decision': [choice(['declined', 'approved']) for _ in range(num_samples)]
+        'age': [choice(range(18, 65)) for _ in range(num_samples)],
+        'income': income_samples,
+        'education': ['Bachelor', 'Master', 'PhD', 'Bachelor'] * (num_samples // 4),
+        'bank_decision': [choice(['declined', 'approved']) for _ in range(num_samples)]
     }
 
     # Convert the data dictionary to a Pandas DataFrame
