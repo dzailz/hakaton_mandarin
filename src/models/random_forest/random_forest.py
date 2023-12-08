@@ -10,20 +10,20 @@ from imblearn.over_sampling import SMOTE
 
 class RandomForest(RandomForestClassifier):
     def __init__(
-        self, 
-        df: DataFrame, 
-        n_estimators: int = 100,
-        random_state: int = 42,
-        criterion: Literal['gini', 'entropy', 'log_loss'] = "gini",
-        max_features: float | int | Literal['sqrt', 'log2'] = "sqrt",
-        class_weight: Mapping | Sequence[Mapping] | Literal['balanced', 'balanced_subsample'] | None = None,
-        X_resampled: Any = None, 
-        y_resampled: Any = None,
-        X_train: Any = None, 
-        X_test: Any = None, 
-        y_train: Any = None, 
-        y_test: Any = None, 
-        ):
+            self,
+            df: DataFrame,
+            n_estimators: int = 100,
+            random_state: int = 42,
+            criterion: Literal['gini', 'entropy', 'log_loss'] = "gini",
+            max_features: float | int | Literal['sqrt', 'log2'] = "sqrt",
+            class_weight: Mapping | Sequence[Mapping] | Literal['balanced', 'balanced_subsample'] | None = None,
+            X_resampled: Any = None,
+            y_resampled: Any = None,
+            X_train: Any = None,
+            X_test: Any = None,
+            y_train: Any = None,
+            y_test: Any = None,
+    ):
         self.df = df
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
@@ -33,12 +33,12 @@ class RandomForest(RandomForestClassifier):
         self.y_test = y_test
 
         super().__init__(
-            n_estimators=n_estimators, 
-            random_state=random_state, 
-            criterion=criterion, 
-            max_features=max_features, 
+            n_estimators=n_estimators,
+            random_state=random_state,
+            criterion=criterion,
+            max_features=max_features,
             class_weight=class_weight
-            )
+        )
 
     @staticmethod
     def numerics_and_non_numerics(df: DataFrame) -> tuple[list[str], list[str]]:
@@ -88,11 +88,8 @@ class RandomForest(RandomForestClassifier):
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
 
-
-
     def save_to_pickle(self, path: str):
         pass
-
 
 # if __name__ == '__main__':
 #     import pandas as pd
@@ -100,7 +97,7 @@ class RandomForest(RandomForestClassifier):
 #     from os import path
 #     from dvclive import Live
 #     from src.models.common.split import data_split
-    
+
 
 #     df_path = path.join(path.dirname(__file__), '../../data/datasets/prepared_one_bank.parquet')
 

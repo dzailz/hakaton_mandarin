@@ -57,4 +57,4 @@ if __name__ == '__main__':
     df = pd.read_parquet(df_path)
     df.drop('position', axis=1, inplace=True)
 
-    train_predict_rf(df)
+    train_predict_rf(df=df.copy())
