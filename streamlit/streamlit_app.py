@@ -1,6 +1,8 @@
 import streamlit as st
+import os
 
-file_path = "correct_professions.txt"
+path = os.path.dirname(__file__)
+file_path = path + "/correct_professions.txt"
 
 # Открытие файла для чтения
 with open(file_path, "r", encoding="utf-8") as file:
