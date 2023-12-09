@@ -6,7 +6,7 @@ from pathlib import Path
 from dvclive import Live
 from box import ConfigBox
 from ruamel.yaml import YAML
-from sklearn.metrics import classification_report, f1_score, roc_auc_score, roc_curve, auc
+from sklearn.metrics import classification_report, f1_score, roc_auc_score
 
 from settings import DVC_PARAMS_FILE, MODELS_FOLDER, DATASETS_FOLDER, RESULTS_FOLDER, DVC_YAML_FILE
 from src.models.common.split import data_split
@@ -111,9 +111,10 @@ if __name__ == '__main__':
     import re
 
     for df_path in Path(DATASETS_FOLDER).glob('*.parquet'):
-        if re.search(r'bank_(\w+)', df_path.name):
-            bank_name = re.search(r'bank_(\w+)', df_path.name).group(0)
+        if re.search(r'^bank_(\w+)', df_path.name):
+            bank_name = re.search(r'^bank_(\w+)', df_path.name).group(0)
             df = pd.read_parquet(df_path)
             df.drop('position', axis=1, inplace=True)
             train_predict_rf(df=df.copy(), bank=bank_name)
+            break
 

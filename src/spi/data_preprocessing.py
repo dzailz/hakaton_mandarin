@@ -84,7 +84,9 @@ class DataPreprocessing(DataPreparation):
             multiplier: float = 1.5,
             is_origin_time_column_drop=True,
             ohe_columns: list[str] | None = None,
-            is_normalized: bool = True
+            is_normalized: bool = True,
+            remove_outliers: bool = True,
+            ohe: bool = True
     ):
         """
         This method is responsible for the final preparation of the dataframe. It performs several operations such as
@@ -120,17 +122,19 @@ class DataPreprocessing(DataPreparation):
         self.drop_columns(columns=self.banks_cols_to_drop)
 
         # Remove outliers from all numeric columns based on the provided condition value and multiplier
-        self.remove_outliers_all_numeric_with_condition(
-            is_new=False,
-            condition_value=condition_value,
-            multiplier=multiplier
-        )
+        if remove_outliers:
+            self.remove_outliers_all_numeric_with_condition(
+                is_new=False,
+                condition_value=condition_value,
+                multiplier=multiplier
+            )
 
         # Add time features to the dataframe and optionally drop the original time column
         self.add_time_features(is_drop=is_origin_time_column_drop)
 
         # One-hot encode specified columns or all categorical columns if no columns are specified
-        self.ohe_categorical_columns(is_new=False, columns=ohe_columns)
+        if ohe and ohe_columns:
+            self.ohe_categorical_columns(is_new=False, columns=ohe_columns)
 
         if is_normalized:
             self.normalize_numeric_features(is_new=False, columns=self.money_columns)
@@ -181,6 +185,12 @@ if __name__ == '__main__':
             money_columns=money_columns
         )
         one_bank_prepared_save_path = path.abspath(
-            path.join(__file__, f'../../../data/datasets/prepared_bank_{i}.parquet'))
+            path.join(__file__, f'../../../data/datasets/bank_{i}.parquet'))
         full_df = dpp.preparation_full_df()
-        dpp.final_preparation(save_path=one_bank_prepared_save_path)
+        dpp.final_preparation(
+            save_path=one_bank_prepared_save_path,
+            ohe=True,
+            is_normalized=False,
+            remove_outliers=False,
+            ohe_columns=categorical_columns
+        )

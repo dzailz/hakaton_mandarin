@@ -3,24 +3,36 @@ params:
 metrics:
 - results/metrics.json
 plots:
-- results/plots/sklearn/test/bank_b_confusion_matrix.json:
+- results/plots/sklearn/test/bank_a_confusion_matrix.json:
     template: confusion
     x: actual
     y: predicted
-    title: Test bank_b Confusion Matrix
+    title: Test bank_a Confusion Matrix
     x_label: True Label
     y_label: Predicted Label
-- results/plots/sklearn/test/bank_b_roc_curve.json:
+- results/plots/sklearn/test/bank_a_roc_curve.json:
     template: simple
     x: fpr
     y: tpr
     title: Receiver operating characteristic (ROC)
     x_label: False Positive Rate
     y_label: True Positive Rate
-- results/plots/sklearn/test/bank_b_precision_recall_curve.json:
+- results/plots/sklearn/test/bank_a_precision_recall_curve.json:
     template: simple
     x: recall
     y: precision
     title: Precision-Recall Curve
     x_label: Recall
     y_label: Precision
+- precision vs recall:
+        template: simple
+        x: precision
+        y:
+            results/plots/sklearn/test/bank_a_precision_recall_curve.json: recall
+
+- actual vs predicted:
+        template: confusion_normalized
+        x: actual
+        y:
+            results/plots/sklearn/test/bank_a_confusion_matrix.json: predicted
+
