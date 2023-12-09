@@ -55,72 +55,56 @@ def train_predict_rf(df: pd.DataFrame, bank: str):
             X_train, X_test, y_train, y_test = data_split(rf.X_resampled, rf.y_resampled)
 
             # Fit the model to the training data
-            rf.fit(X_train, y_train)
-
-            # Predict the training data
-            y_train_pred = rf.predict(X_train)
-
-            # Generate a classification report for the training data
-            classification_report_train = classification_report(y_train, y_train_pred, output_dict=False)
-
-            # Calculate the F1 score for the training data
-            f1_score_train = f1_score(y_train, y_train_pred, average="weighted")
-
-            # Calculate the ROC AUC score for the training data
-            roc_auc_score_train = roc_auc_score(y_train, rf.predict_proba(X_train)[:, 1])
-
-            # Log the classification report, F1 score, and ROC AUC score for the training data
-            live.log_metric("train/classification_report", classification_report_train, plot=False)
-            logger.info(f"Train classification report: {classification_report_train}")
-            live.log_metric("train/f1", f1_score_train, plot=False)
-            logger.info(f"Train f1 score: {f1_score_train}")
-            live.log_metric("ROC_AUC", roc_auc_score_train, plot=False)
-            logger.info(f"Train ROC AUC score: {roc_auc_score_train}")
-            # Log the confusion matrix, ROC curve, and precision-recall curve for the training data
-            live.log_sklearn_plot("confusion_matrix",
-                                  y_train, y_train_pred, name="train/confusion_matrix", title="Train Confusion Matrix")
-            y_train = y_train.replace({'denied': 0, 'success': 1})
-            live.log_sklearn_plot("roc", y_train,
-                                  rf.predict_proba(X_train)[:, 1], name="train/roc_curve", )
+            model = rf.fit(X_train, y_train)
             # Predict the testing data
-            y_test_pred = rf.predict(X_test)
+            y_test_pred = model.predict(X_test)
             # Generate a classification report for the testing data
             classification_report_test = classification_report(y_test, y_test_pred, output_dict=False)
             # Calculate the F1 score for the testing data
             f1_score_test = f1_score(y_test, y_test_pred, average="weighted")
+            proba = model.predict_proba(X_test)[:, 1]
             # Calculate the ROC AUC score for the testing data
-            roc_auc_score_test = roc_auc_score(y_test, rf.predict_proba(X_test)[:, 1])
+            roc_auc_score_test = roc_auc_score(y_test, proba)
             # Log the classification report, F1 score, and ROC AUC score for the testing data
-            live.log_metric("test/classification_report", classification_report_test, plot=False)
-            logger.info(f"Test classification report: {classification_report_test}")
-            live.log_metric("test/f1", f1_score_test, plot=False)
-            logger.info(f"Test f1 score: {f1_score_test}")
+            live.log_metric(f"test/{bank}_classification_report", classification_report_test, plot=False)
+            logger.info(f"Test {bank} classification report: {classification_report_test}")
+            live.log_metric(f"test/{bank}_f1", f1_score_test, plot=False)
+            logger.info(f"{bank}_f1 score: {f1_score_test}")
             live.log_metric("test/ROC_AUC", roc_auc_score_test, plot=False)
-            logger.info(f"Test ROC AUC score: {roc_auc_score_test}")
+            logger.info(f"{bank}_ROC AUC score: {roc_auc_score_test}")
             # Log the confusion matrix, ROC curve, and precision-recall curve for the testing data
-            live.log_sklearn_plot("confusion_matrix",
-                                  y_test, y_test_pred, name="test/confusion_matrix", title="Test Confusion Matrix")
+            live.log_sklearn_plot(
+                "confusion_matrix",
+                y_test,
+                y_test_pred,
+                name=f"test/{bank}_confusion_matrix",
+                title=f"Test {bank} Confusion Matrix"
+            )
             y_test = y_test.replace({'denied': 0, 'success': 1})
-            live.log_sklearn_plot("roc", y_test,
-                                  rf.predict_proba(X_test)[:, 1], name="test/roc_curve",)
+            live.log_sklearn_plot(
+                "roc",
+                y_test,
+                predictions=proba,
+                name=f"test/{bank}_roc_curve",
+            )
             live.log_sklearn_plot(
                 "precision_recall",
                 y_test,
-                rf.predict_proba(X_test)[:, 1],
-                name="test/precision_recall_curve",
+                proba,
+                name=f"test/{bank}_precision_recall_curve",
             )
             model_name = f"random_forest_{n_estimators}{'_' + bank}.pkl"
             # Save the trained model to a file
             model_path = Path(MODELS_FOLDER, model_name)
-            pickle.dump(rf, open(model_path, 'wb'))
+            pickle.dump(model, open(model_path, 'wb'))
 
             # Log the model as an artifact
-            # live.log_artifact(
-            #     path=MODELS_FOLDER,
-            #     type="model",
-            #     name=model_name,
-            #     labels=[n_estimators, "random_forest", bank]
-            # )
+            live.log_artifact(
+                path=MODELS_FOLDER,
+                type="model",
+                name=model_name,
+                labels=[n_estimators, "random_forest", bank]
+            )
 
 
 if __name__ == '__main__':
