@@ -191,6 +191,6 @@ if __name__ == '__main__':
             save_path=one_bank_prepared_save_path,
             ohe=True,
             is_normalized=False,
-            remove_outliers=False,
+            remove_outliers=True,
             ohe_columns=categorical_columns
         )
