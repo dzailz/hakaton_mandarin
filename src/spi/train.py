@@ -70,7 +70,7 @@ def train_predict_rf(df: pd.DataFrame, bank: str):
             logger.info(f"Test {bank} classification report: {classification_report_test}")
             live.log_metric(f"test/{bank}_f1", f1_score_test, plot=False)
             logger.info(f"{bank}_f1 score: {f1_score_test}")
-            live.log_metric("test/ROC_AUC", roc_auc_score_test, plot=False)
+            live.log_metric(f"test/{bank}ROC_AUC", roc_auc_score_test, plot=False)
             logger.info(f"{bank}_ROC AUC score: {roc_auc_score_test}")
             # Log the confusion matrix, ROC curve, and precision-recall curve for the testing data
             live.log_sklearn_plot(
@@ -93,7 +93,7 @@ def train_predict_rf(df: pd.DataFrame, bank: str):
                 proba,
                 name=f"test/{bank}_precision_recall_curve",
             )
-            model_name = f"random_forest_{n_estimators}{'_' + bank}.pkl"
+            model_name = f"random_forest_{n_estimators}_{bank}.pkl"
             # Save the trained model to a file
             model_path = Path(MODELS_FOLDER, model_name)
             pickle.dump(model, open(model_path, 'wb'))
@@ -117,8 +117,3 @@ if __name__ == '__main__':
             df.drop('position', axis=1, inplace=True)
             train_predict_rf(df=df.copy(), bank=bank_name)
 
-    # df_path = Path(DATASETS_FOLDER, 'prepared_one_bank.parquet')
-    # df = pd.read_parquet(df_path)
-    # df.drop('position', axis=1, inplace=True)
-    #
-    # train_predict_rf(df=df.copy())
