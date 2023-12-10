@@ -1,7 +1,7 @@
 {
     "test": {
-        "bank_b_classification_report": "              precision    recall  f1-score   support\n\n      denied       0.92      0.77      0.84       900\n     success       0.79      0.93      0.85       853\n\n    accuracy                           0.85      1753\n   macro avg       0.85      0.85      0.84      1753\nweighted avg       0.86      0.85      0.84      1753\n",
-        "bank_b_f1": 0.8446150695529009,
-        "bank_bROC_AUC": 0.9136322782336851
+        "bank_d_classification_report": "              precision    recall  f1-score   support\n\n      denied       0.91      0.80      0.85       878\n     success       0.82      0.92      0.87       888\n\n    accuracy                           0.86      1766\n   macro avg       0.87      0.86      0.86      1766\nweighted avg       0.87      0.86      0.86      1766\n",
+        "bank_d_f1": 0.860728983654117,
+        "bank_dROC_AUC": 0.918532855178641
     }
 }
