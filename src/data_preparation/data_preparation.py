@@ -1,10 +1,15 @@
+from pathlib import Path
+
 import pandas as pd
 import re
 from scipy.stats import anderson
 from sklearn.preprocessing import StandardScaler
+import pickle
 
 from pandas import DataFrame
 import logging
+
+from settings import MODELS_FOLDER
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -234,11 +239,12 @@ class DataPreparation:
             self.df = pd.get_dummies(df, columns=columns)
 
     def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
-                                   is_new: bool = True):
+                                   is_new: bool = True, scaler_save_name: str | None = 'scaler.pkl'):
         """
         Normalize numeric columns using StandardScaler
         Scaler is available in self.scaler
         """
+        scaler_path = Path(MODELS_FOLDER, scaler_save_name)
         if df is None:
             df = self.df
         if columns is None:
@@ -246,51 +252,13 @@ class DataPreparation:
         df[columns] = self.scaler.fit_transform(df[columns])
         if is_new:
             self.normalized_df = df
+            pickle.dump(self.scaler, open(scaler_path, 'wb'))
         else:
             self.df = df
+            pickle.dump(self.scaler, open(scaler_path, 'wb'))
 
     def save_df(self, path: str, index: bool = False, compression='gzip'):
         """
         Save the data frame to parquet
         """
         self.df.to_parquet(path, index=index, compression=compression)
-
-
-if __name__ == '__main__':
-    from os import path
-    banks = [f'bank_{bank}_decision' for bank in ['a', 'b', 'c', 'd', 'e']]
-
-    for i in ['a', 'b', 'c', 'd', 'e']:
-        banks_to_drop = banks.copy()
-        banks_to_drop.remove(f'bank_{i}_decision')
-
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
-        df_path = path.join(path.dirname(__file__), '../../data/datasets/SF_Mandarin_dataset_ver3.csv')
-
-        df = pd.read_csv(df_path, sep=';', index_col=0)
-
-        bank_a = DataPreparation(
-            df=df,
-            to_drop_columns=banks_to_drop,
-            target_bank_col=[i for i in banks if i not in banks_to_drop].pop()
-        )
-        bank_a.drop_na()
-        bank_a.index_as_int()
-        bank_a.drop_duplicates()
-        bank_a.convert_from_camel_case_to_snake_case()
-        bank_a.columns_to_datetime(columns=['job_start_date', 'birth_date'])
-
-        bank_a.columns_to_type(columns=['month_profit', 'month_expense', 'loan_amount'], dtype='UInt64')
-
-        bank_a.columns_to_type(columns=['snils', 'gender', 'merch_code', 'child_count', 'loan_term'], dtype='UInt8')
-        bank_a.columns_to_type(
-            columns=['family_status', 'goods_category', 'position', 'employment_status', 'education', 'snils',
-                     'gender'], dtype='category')
-
-        bank_a.remove_outliers_all_numeric_with_condition(is_new=False)
-        bank_a.add_time_features()
-        bank_a.ohe_categorical_columns(is_new=False)
-        bank_a.normalize_numeric_features(is_new=False)
-        save_path = path.join(path.dirname(__file__), f'../../data/datasets/bank_{i}_ohe_norm.parquet')
-        bank_a.save_df(save_path)

@@ -10,4 +10,4 @@ preprocess:
 
 train:
   random_forest:
-    n_estimators: [50, 100, 150]
+    n_estimators: [100]
