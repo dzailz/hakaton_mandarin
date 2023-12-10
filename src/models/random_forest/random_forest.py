@@ -12,19 +12,22 @@ class RandomForest(RandomForestClassifier):
     def __init__(
             self,
             df: DataFrame,
+            bank: str | None = None,
             n_estimators: int = 100,
             random_state: int = 42,
             criterion: Literal['gini', 'entropy', 'log_loss'] = "gini",
             max_features: float | int | Literal['sqrt', 'log2'] = "sqrt",
             class_weight: Mapping | Sequence[Mapping] | Literal['balanced', 'balanced_subsample'] | None = None,
-            X_resampled: Any = None,
-            y_resampled: Any = None,
-            X_train: Any = None,
-            X_test: Any = None,
-            y_train: Any = None,
-            y_test: Any = None,
+            X_resampled: Any | None = None,
+            y_resampled: Any | None = None,
+            X_train: Any | None = None,
+            X_test: Any | None = None,
+            y_train: Any | None = None,
+            y_test: Any | None = None,
     ):
         self.df = df
+        self.bank = bank
+        self.bank_decision = f"{self.bank}_decision"
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
         self.X_train = X_train
@@ -77,8 +80,8 @@ class RandomForest(RandomForestClassifier):
         self.convert_datetime_to_numeric(df=df, non_numeric_columns=non_numeric_columns)
 
         # Separate features and target variable
-        X = df.drop('bank_a_decision', axis=1)
-        y = df['bank_a_decision']
+        X = df.drop(self.bank_decision, axis=1)
+        y = df[self.bank_decision]
 
         # Apply SMOTE after scaling numerical features
         scaler = StandardScaler()

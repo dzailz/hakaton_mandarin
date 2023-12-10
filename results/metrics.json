@@ -1,0 +1,7 @@
+{
+    "test": {
+        "bank_b_classification_report": "              precision    recall  f1-score   support\n\n      denied       0.92      0.77      0.84       900\n     success       0.79      0.93      0.85       853\n\n    accuracy                           0.85      1753\n   macro avg       0.85      0.85      0.84      1753\nweighted avg       0.86      0.85      0.84      1753\n",
+        "bank_b_f1": 0.8446150695529009,
+        "bank_bROC_AUC": 0.9136322782336851
+    }
+}
