@@ -11,3 +11,4 @@ bankDds.csv
 bankEds.csv
 preprocessed_dataset.csv
 datasets
+/dvc_plots/
