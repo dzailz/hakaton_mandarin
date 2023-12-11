@@ -5,6 +5,7 @@ import re
 from scipy.stats import anderson
 from sklearn.preprocessing import StandardScaler
 import pickle
+from sklearn.preprocessing import OneHotEncoder
 
 from pandas import DataFrame
 import logging
@@ -16,7 +17,14 @@ logger.setLevel(logging.INFO)
 
 
 class DataPreparation:
-    def __init__(self, df: DataFrame, target_bank_col: str, to_drop_columns: list[str] | None = None, ):
+    def __init__(
+            self,
+            df: DataFrame,
+            target_bank_col: str | None = None,
+            to_drop_columns: list[str] | None = None,
+            scaler: StandardScaler | None = None,
+            ohe_model: OneHotEncoder | None = None
+    ):
         """
         :param df: dataframe to be cleaned for one bank
         :param to_drop_columns: columns to be dropped
@@ -29,7 +37,8 @@ class DataPreparation:
         self.ohe_df = None
         self.df_no_outliers = None
         self.normalized_df = None
-        self.scaler = StandardScaler()
+        self.scaler = scaler if scaler else StandardScaler()
+        self.ohe_model = ohe_model if ohe_model else OneHotEncoder(sparse=False, drop='first')
 
     def drop_na(self):
         """
@@ -144,7 +153,7 @@ class DataPreparation:
         """
         Drop the columns
         """
-        self.df = self.df.drop(columns=columns)
+        self.df.drop(columns=columns, axis=1, inplace=True)
 
     def remove_outliers_all_numeric_with_condition(self, df: DataFrame | None = None, condition_value: str = 'success',
                                                    multiplier: float = 1.5, is_new: bool = True):
@@ -187,21 +196,24 @@ class DataPreparation:
         else:
             self.df = df_no_outliers
 
-    def add_time_features(self, is_drop: bool = True):
+    def add_time_features(self, is_drop: bool = True, df: DataFrame | None = None):
         """
         is_drop: if True, then the time columns will be dropped
         Add age, job experience, job start year, and birth year features
         """
-        self.df['birth_year'] = self.df['birth_date'].dt.year
-        self.df['age'] = pd.Timestamp.now().year - self.df['birth_year']
-        self.df['job_start_year'] = self.df['job_start_date'].dt.year
-        self.df['job_experience'] = pd.Timestamp.now().year - self.df['job_start_year']
+        if df is None:
+            df = self.df
+        self.columns_to_datetime(['job_start_date', 'birth_date'])
+        df['birth_year'] = df['birth_date'].dt.year
+        df['age'] = pd.Timestamp.now().year - df['birth_year']
+        df['job_start_year'] = df['job_start_date'].dt.year
+        df['job_experience'] = pd.Timestamp.now().year - df['job_start_year']
         if is_drop:
-            self.df.drop('job_start_date', inplace=True, axis=1)
-            self.df.drop('birth_date', inplace=True, axis=1)
+            df.drop('job_start_date', inplace=True, axis=1)
+            df.drop('birth_date', inplace=True, axis=1)
 
     def ohe_categorical_columns(self, df: DataFrame | None = None, columns: list[str] | None = None,
-                                is_new: bool = True):
+                                is_new: bool = True, save_model: bool = True, ohe_filename: str = 'ohe_model.pkl'):
         """
         One hot encode categorical columns
         if columns is None, then the default columns will be used
@@ -233,10 +245,22 @@ class DataPreparation:
                 'snils',
                 'merch_code'
             ]
+
+        # Fit and transform the specified columns
+        ohe_result = self.ohe_model.fit_transform(df[columns])
+
+        # Create a DataFrame with the one-hot-encoded columns
+        ohe_df = pd.DataFrame(ohe_result, columns=self.ohe_model.get_feature_names_out(columns))
+        ohe_model_path = Path(MODELS_FOLDER, ohe_filename)
+        # Concatenate the new DataFrame with the original DataFrame
         if is_new:
-            self.ohe_df = pd.get_dummies(df, columns=columns)
+            self.ohe_df = pd.concat([df, ohe_df], axis=1)
         else:
-            self.df = pd.get_dummies(df, columns=columns)
+            self.df = pd.concat([df, ohe_df], axis=1)
+
+        # Save the one-hot encoding model
+        if save_model:
+            pickle.dump(self.ohe_model, open(ohe_model_path, 'wb'))
 
     def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
                                    is_new: bool = True, scaler_save_name: str | None = 'scaler.pkl'):
