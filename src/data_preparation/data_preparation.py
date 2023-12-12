@@ -23,7 +23,8 @@ class DataPreparation:
             target_bank_col: str | None = None,
             to_drop_columns: list[str] | None = None,
             scaler: StandardScaler | None = None,
-            ohe_model: OneHotEncoder | None = None
+            ohe_model: OneHotEncoder | None = None,
+            to_ohe_columns: list[str] | None = None,
     ):
         """
         :param df: dataframe to be cleaned for one bank
@@ -38,8 +39,11 @@ class DataPreparation:
         self.df_no_outliers = None
         self.normalized_df = None
         self.scaler = scaler if scaler else StandardScaler()
-        self.ohe_model = ohe_model if ohe_model else OneHotEncoder(sparse_output=False, drop='first',
-                                                                   handle_unknown='error')
+        self.ohe_model = ohe_model or OneHotEncoder(sparse_output=False, drop='first',
+                                                    handle_unknown='error')
+        self.to_ohe_columns = to_ohe_columns or ['education', 'employment_status', 'gender', 'family_status',
+                                                 'child_count', 'loan_term', 'goods_category', 'value', 'snils',
+                                                 'merch_code']
 
     def drop_na(self):
         """
@@ -213,7 +217,53 @@ class DataPreparation:
             df.drop('job_start_date', inplace=True, axis=1)
             df.drop('birth_date', inplace=True, axis=1)
 
-    def ohe_categorical_columns(self, df: DataFrame | None = None, columns: list[str] | None = None,
+    def fit_one_hot_encoder(self, df: DataFrame = None, columns: list[str] = None, save_model: bool = True,
+                            ohe_filename: str = 'ohe_model.pkl'):
+        """
+        Fit the one-hot encoder on the specified columns and save the model.
+        """
+        if df is None:
+            df = self.df
+        columns = columns or self.to_ohe_columns
+
+        # Fit the one-hot encoder on the specified columns
+        self.ohe_model.fit(df[columns])
+
+        # Save the one-hot encoding model
+        if save_model:
+            with open(Path(MODELS_FOLDER, ohe_filename), 'wb') as model_file:
+                pickle.dump(self.ohe_model, model_file)
+
+    def transform_one_hot_encoder(self, df: DataFrame = None, columns: list[str] = None, is_new: bool = True):
+        """
+        Transform the specified DataFrame using the pre-fitted one-hot encoder.
+        """
+        if df is None:
+            df = self.df
+        columns = columns or self.to_ohe_columns
+
+        # Transform the specified columns
+        ohe_result = self.ohe_model.transform(df[columns])
+
+        # Create a DataFrame with the one-hot-encoded columns
+        ohe_df = pd.DataFrame(ohe_result, columns=self.ohe_model.get_feature_names_out(columns))
+
+        # Drop the original categorical columns
+        df = df.drop(columns, axis=1, errors='ignore')
+
+        # Join the new DataFrame with the original DataFrame based on the index
+        df = df.join(ohe_df)
+
+        # Drop rows with NaN values
+        df.dropna(inplace=True)
+
+        # If is_new is True, assign the result to self.ohe_df
+        if is_new:
+            self.ohe_df = df
+        else:
+            self.df = df
+
+    def ohe_categorical_columns(self, df: DataFrame = None, columns: list[str] = None,
                                 is_new: bool = True, save_model: bool = True, ohe_filename: str = 'ohe_model.pkl'):
         """
         One hot encode categorical columns
@@ -231,41 +281,15 @@ class DataPreparation:
                 'merch_code'
             ]
         """
-        if not df:
+        if df is None:
             df = self.df
-        if not columns:
-            columns = [
-                'education',
-                'employment_status',
-                'gender',
-                'family_status',
-                'child_count',
-                'loan_term',
-                'goods_category',
-                'value',
-                'snils',
-                'merch_code'
-            ]
+        columns = columns or self.to_ohe_columns
 
-        # Fit and transform the specified columns
-        ohe_result = self.ohe_model.fit_transform(df[columns])
+        # Fit the one-hot encoder and save the model
+        self.fit_one_hot_encoder(df, columns, save_model, ohe_filename)
 
-        # Create a DataFrame with the one-hot-encoded columns
-        ohe_df = pd.DataFrame(ohe_result, columns=self.ohe_model.get_feature_names_out(columns))
-        # Drop the original categorical columns
-        df = df.drop(columns, axis=1, errors='ignore')
-        df.dropna(inplace=True)
-
-        ohe_model_path = Path(MODELS_FOLDER, ohe_filename)
-        # Concatenate the new DataFrame with the original DataFrame
-        if is_new:
-            self.ohe_df = pd.concat([df, ohe_df], axis=1)
-        else:
-            self.df = pd.concat([df, ohe_df], axis=1)
-
-        # Save the one-hot encoding model
-        if save_model:
-            pickle.dump(self.ohe_model, open(ohe_model_path, 'wb'))
+        # Transform the DataFrame using the pre-fitted one-hot encoder
+        self.transform_one_hot_encoder(df, columns, is_new)
 
     def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
                                    is_new: bool = True, scaler_save_name: str | None = 'scaler.pkl'):
