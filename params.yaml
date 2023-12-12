@@ -4,7 +4,7 @@ base:
   test_size: 0.2
 
 preprocess:
-  categorical_columns: ['family_status', 'goods_category', 'position', 'employment_status', 'education']
+  categorical_columns: ['family_status', 'goods_category', 'position', 'employment_status', 'education', value]
   numeric_categorical_columns: ['snils', 'gender', 'merch_code', 'child_count', 'loan_term']
   money_columns: ['month_profit', 'month_expense', 'loan_amount']
 

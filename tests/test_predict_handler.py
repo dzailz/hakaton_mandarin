@@ -1,3 +1,5 @@
+from random import choice, randint
+
 import pytest
 from fastapi.testclient import TestClient
 from main import app, model, scaler
@@ -16,15 +18,15 @@ def test_predict_bank_decision_with_valid_input():
         value="10 и более лет",
         job_start_date=str(datetime.date(datetime.strptime('2000-01-01', '%Y-%m-%d'))),
         position="Manager",
-        month_profit=1000,
-        month_expense=1000000,
-        gender=1,
+        month_profit=randint(10000, 10000000),
+        month_expense=randint(10000, 10000000),
+        gender=choice([1, 2]),
         family_status="Никогда в браке не состоял(а)",
-        child_count=2,
-        snils=1,
+        child_count=choice([0, 1, 2, 3, 4]),
+        snils=choice([0, 1]),
         merch_code=61,
-        loan_amount=1000000,
-        loan_term=12,
+        loan_amount=randint(10000, 10000000),
+        loan_term=choice([6, 12, 18, 24]),
         goods_category="Mobile_devices"
     )
 
