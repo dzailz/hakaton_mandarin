@@ -38,7 +38,8 @@ class DataPreparation:
         self.df_no_outliers = None
         self.normalized_df = None
         self.scaler = scaler if scaler else StandardScaler()
-        self.ohe_model = ohe_model if ohe_model else OneHotEncoder(sparse=False, drop='first')
+        self.ohe_model = ohe_model if ohe_model else OneHotEncoder(sparse_output=False, drop='first',
+                                                                   handle_unknown='error')
 
     def drop_na(self):
         """
@@ -251,6 +252,10 @@ class DataPreparation:
 
         # Create a DataFrame with the one-hot-encoded columns
         ohe_df = pd.DataFrame(ohe_result, columns=self.ohe_model.get_feature_names_out(columns))
+        # Drop the original categorical columns
+        df = df.drop(columns, axis=1, errors='ignore')
+        df.dropna(inplace=True)
+
         ohe_model_path = Path(MODELS_FOLDER, ohe_filename)
         # Concatenate the new DataFrame with the original DataFrame
         if is_new:
