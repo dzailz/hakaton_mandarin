@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 from box import ConfigBox
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from src.api.data_structures.BankDecisionInput import BankDecisionInput
 from src.data_preparation.data_preparation import DataPreparation
@@ -42,21 +42,24 @@ def read_root():
 
 @app.post("/predict_bank_decision")
 def predict_bank_decision(data: BankDecisionInput):
+      try:
     # Convert input data to a DataFrame
-    input_data = pd.DataFrame([data.model_dump()])
-    # input_data = input_data.drop('position', axis=1)
-    dp = DataPreparation(df=input_data, ohe_model=ohe_model)
-    dp.index_as_int()
-    dp.columns_to_type(columns=numeric_categorical_columns, dtype='UInt8')
-    dp.columns_to_type(columns=money_columns, dtype='int64')
-    dp.transform_to_categorical(columns=categorical_columns + numeric_categorical_columns)
-    dp.add_time_features()
-
-    dp.transform_one_hot_encoder(is_new=False)
-    dp.df[money_columns] = scaler.fit_transform(dp.df[money_columns])
-    dp.drop_columns(columns=['position'])
-    # Make predictions using the trained model
-    prediction = model.predict(dp.df)
+          input_data = pd.DataFrame([data.model_dump()])
+    # inp ut_data = input_data.drop('position', axis=1)
+          dp = DataPreparation(df=input_data, ohe_model=ohe_model)
+          dp.index_as_int()
+          dp.columns_to_type(columns=numeric_categorical_columns, dtype='UInt8')
+          dp.columns_to_type(columns=money_columns, dtype='int64')
+          dp.transform_to_categorical(columns=categorical_columns + numeric_categorical_columns)
+          dp.add_time_features()
+ 
+          dp.transform_one_hot_encoder(is_new=False)
+          dp.df[money_columns] = scaler.fit_transform(dp.df[money_columns])
+          dp.drop_columns(columns=['position'])
+    # Mak e predictions using the trained model
+          prediction = model.predict(dp.df)
 
     # Return the prediction as a response
-    return {"prediction": prediction[0]}
+          return {"prediction": prediction[0]}
+      except Exception as e:
+          raise HTTPException(status_code=500, detail="Не удалось сделать прогноз")
