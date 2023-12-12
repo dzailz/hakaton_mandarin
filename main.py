@@ -18,9 +18,16 @@ categorical_columns = list(params.preprocess.categorical_columns)
 numeric_categorical_columns = list(params.preprocess.numeric_categorical_columns)
 money_columns = list(params.preprocess.money_columns)
 
+bank_names = [f'bank_{i}' for i in ['a', 'b', 'c', 'd', 'e']]
+models_names = [f"random_forest_100_bank_{i}.pkl" for i in ['a', 'b', 'c', 'd', 'e']]
+model_list = []
 model_name = "random_forest_100_bank_d.pkl"
 scaler_name = "scaler.pkl"
 ohe_model = "ohe_model.pkl"
+
+for name in models_names:
+    with open(Path(MODELS_FOLDER, name), "rb") as model_file:
+        model_list.append(pickle.load(model_file))
 
 with open(Path(MODELS_FOLDER, model_name), "rb") as model_file:
     model = pickle.load(model_file)
@@ -56,7 +63,14 @@ def predict_bank_decision(data: BankDecisionInput):
     dp.df[money_columns] = scaler.fit_transform(dp.df[money_columns])
     dp.drop_columns(columns=['position'])
     # Make predictions using the trained model
-    prediction = model.predict(dp.df)
+    predictions = []
+    probas = []
+    for model in model_list:
+        prediction = model.predict(dp.df)
+        predictions.append(prediction[0])
+        probas.append(model.predict_proba(dp.df)[0][1])
+    # prediction = model.predict(dp.df)
+    # proba = model.predict_proba(dp.df)
 
     # Return the prediction as a response
-    return {"prediction": prediction[0]}
+    return {"prediction": predictions, "probability": probas}
