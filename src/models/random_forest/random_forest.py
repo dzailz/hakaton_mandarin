@@ -84,10 +84,6 @@ class RandomForest(RandomForestClassifier):
         y = df[self.bank_decision]
 
         # Apply SMOTE after scaling numerical features
-        # (commented because data is already scaled)
-        # scaler = StandardScaler()
-        # X[numeric_columns] = scaler.fit_transform(X[numeric_columns])
-
         X_resampled, y_resampled = SMOTE().fit_resample(X, y)
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
