@@ -25,7 +25,7 @@ poetry install
 
 ## Примеры ответа модели
 При подготовке проекта использовался python 3.11
-![image](https://github.com/dzailz/hakaton_mandarin)
+![image](https://github.com/dzailz/hakaton_mandarin/Precision_recall.jpeg)
 
 ```json
 {
