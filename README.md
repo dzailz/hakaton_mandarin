@@ -23,6 +23,48 @@ poetry install
 ## Использование
 На основе анализа объема данных с заданными параметрами, ML-модель оценивает возможность получения займа клиентом в конкретных банках. Результаты модели могут быть использованы для принятия решений о выдаче займов и оптимизации конверсии бизнеса.
 
+## Примеры ответа модели
+![image](https://github.com/dzailz/hakaton_mandarin)
+
+```bibtex
+{
+  "bank_a": {
+    "prediction": "success",
+    "probability": {
+      "denied": 0.3,
+      "success": 0.7
+    }
+  },
+  "bank_b": {
+    "prediction": "success",
+    "probability": {
+      "denied": 0.34,
+      "success": 0.66
+    }
+  },
+  "bank_c": {
+    "prediction": "success",
+    "probability": {
+      "denied": 0.4,
+      "success": 0.6
+    }
+  },
+  "bank_d": {
+    "prediction": "success",
+    "probability": {
+      "denied": 0.38,
+      "success": 0.62
+    }
+  },
+  "bank_e": {
+    "prediction": "success",
+    "probability": {
+      "denied": 0.22,
+      "success": 0.78
+    }
+  }
+}
+```
 
 ##  <span style="color:green;">Команда</span>  <span style="color:orange;">Мандаринки->Новый год</span>
 - <span style="color:green;">Слободчикова Екатерина Валерьевна</span> 
