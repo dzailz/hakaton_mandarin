@@ -2,25 +2,25 @@
 
 [[package]]
 name = "aiobotocore"
-version = "2.8.0"
+version = "2.9.0"
 description = "Async client for aws services using botocore and aiohttp"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "aiobotocore-2.8.0-py3-none-any.whl", hash = "sha256:32e632fea387acd45416c2bbc03828ee2c2a66a7dc4bd3a9bcb808dea249c469"},
-    {file = "aiobotocore-2.8.0.tar.gz", hash = "sha256:f160497cef21cfffc1a8d4219eeb27bb7b243389c2d021a812b9c0e3fb8e2bd1"},
+    {file = "aiobotocore-2.9.0-py3-none-any.whl", hash = "sha256:acf5e49644e6e434b9ecc26284ae7e05d557effbdcdd8185e2eb08925f011853"},
+    {file = "aiobotocore-2.9.0.tar.gz", hash = "sha256:4dc1e20da4561ae662219ca95b20f923328c3106764a741bec00e98eb6680f7e"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.7.4.post0,<4.0.0"
 aioitertools = ">=0.5.1,<1.0.0"
-boto3 = {version = ">=1.29.4,<1.33.2", optional = true, markers = "extra == \"boto3\""}
-botocore = ">=1.32.4,<1.33.2"
+boto3 = {version = ">=1.33.2,<1.33.14", optional = true, markers = "extra == \"boto3\""}
+botocore = ">=1.33.2,<1.33.14"
 wrapt = ">=1.10.10,<2.0.0"
 
 [package.extras]
-awscli = ["awscli (>=1.30.4,<1.31.2)"]
-boto3 = ["boto3 (>=1.29.4,<1.33.2)"]
+awscli = ["awscli (>=1.31.2,<1.31.14)"]
+boto3 = ["boto3 (>=1.33.2,<1.33.14)"]
 
 [[package]]
 name = "aiohttp"
@@ -393,17 +393,14 @@ tests-no-zope = ["cloudpickle", "hypothesis", "mypy (>=1.1.1)", "pympler", "pyte
 
 [[package]]
 name = "babel"
-version = "2.13.1"
+version = "2.14.0"
 description = "Internationalization utilities"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "Babel-2.13.1-py3-none-any.whl", hash = "sha256:7077a4984b02b6727ac10f1f7294484f737443d7e2e66c5e4380e41a3ae0b4ed"},
-    {file = "Babel-2.13.1.tar.gz", hash = "sha256:33e0952d7dd6374af8dbf6768cc4ddf3ccfefc244f9986d4074704f2fbd18900"},
+    {file = "Babel-2.14.0-py3-none-any.whl", hash = "sha256:efb1a25b7118e67ce3a259bed20545c29cb68be8ad2c784c83689981b7a57287"},
+    {file = "Babel-2.14.0.tar.gz", hash = "sha256:6919867db036398ba21eb5c7a0f6b28ab8cbc3ae7a73a44ebe34ae74a4e7d363"},
 ]
-
-[package.dependencies]
-setuptools = {version = "*", markers = "python_version >= \"3.12\""}
 
 [package.extras]
 dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
@@ -438,6 +435,50 @@ files = [
 ]
 
 [[package]]
+name = "black"
+version = "23.12.0"
+description = "The uncompromising code formatter."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "black-23.12.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:67f19562d367468ab59bd6c36a72b2c84bc2f16b59788690e02bbcb140a77175"},
+    {file = "black-23.12.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:bbd75d9f28a7283b7426160ca21c5bd640ca7cd8ef6630b4754b6df9e2da8462"},
+    {file = "black-23.12.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:593596f699ca2dcbbbdfa59fcda7d8ad6604370c10228223cd6cf6ce1ce7ed7e"},
+    {file = "black-23.12.0-cp310-cp310-win_amd64.whl", hash = "sha256:12d5f10cce8dc27202e9a252acd1c9a426c83f95496c959406c96b785a92bb7d"},
+    {file = "black-23.12.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:e73c5e3d37e5a3513d16b33305713237a234396ae56769b839d7c40759b8a41c"},
+    {file = "black-23.12.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:ba09cae1657c4f8a8c9ff6cfd4a6baaf915bb4ef7d03acffe6a2f6585fa1bd01"},
+    {file = "black-23.12.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ace64c1a349c162d6da3cef91e3b0e78c4fc596ffde9413efa0525456148873d"},
+    {file = "black-23.12.0-cp311-cp311-win_amd64.whl", hash = "sha256:72db37a2266b16d256b3ea88b9affcdd5c41a74db551ec3dd4609a59c17d25bf"},
+    {file = "black-23.12.0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:fdf6f23c83078a6c8da2442f4d4eeb19c28ac2a6416da7671b72f0295c4a697b"},
+    {file = "black-23.12.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:39dda060b9b395a6b7bf9c5db28ac87b3c3f48d4fdff470fa8a94ab8271da47e"},
+    {file = "black-23.12.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7231670266ca5191a76cb838185d9be59cfa4f5dd401b7c1c70b993c58f6b1b5"},
+    {file = "black-23.12.0-cp312-cp312-win_amd64.whl", hash = "sha256:193946e634e80bfb3aec41830f5d7431f8dd5b20d11d89be14b84a97c6b8bc75"},
+    {file = "black-23.12.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:bcf91b01ddd91a2fed9a8006d7baa94ccefe7e518556470cf40213bd3d44bbbc"},
+    {file = "black-23.12.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:996650a89fe5892714ea4ea87bc45e41a59a1e01675c42c433a35b490e5aa3f0"},
+    {file = "black-23.12.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bdbff34c487239a63d86db0c9385b27cdd68b1bfa4e706aa74bb94a435403672"},
+    {file = "black-23.12.0-cp38-cp38-win_amd64.whl", hash = "sha256:97af22278043a6a1272daca10a6f4d36c04dfa77e61cbaaf4482e08f3640e9f0"},
+    {file = "black-23.12.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:ead25c273adfad1095a8ad32afdb8304933efba56e3c1d31b0fee4143a1e424a"},
+    {file = "black-23.12.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:c71048345bdbced456cddf1622832276d98a710196b842407840ae8055ade6ee"},
+    {file = "black-23.12.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:81a832b6e00eef2c13b3239d514ea3b7d5cc3eaa03d0474eedcbbda59441ba5d"},
+    {file = "black-23.12.0-cp39-cp39-win_amd64.whl", hash = "sha256:6a82a711d13e61840fb11a6dfecc7287f2424f1ca34765e70c909a35ffa7fb95"},
+    {file = "black-23.12.0-py3-none-any.whl", hash = "sha256:a7c07db8200b5315dc07e331dda4d889a56f6bf4db6a9c2a526fa3166a81614f"},
+    {file = "black-23.12.0.tar.gz", hash = "sha256:330a327b422aca0634ecd115985c1c7fd7bdb5b5a2ef8aa9888a82e2ebe9437a"},
+]
+
+[package.dependencies]
+click = ">=8.0.0"
+mypy-extensions = ">=0.4.3"
+packaging = ">=22.0"
+pathspec = ">=0.9.0"
+platformdirs = ">=2"
+
+[package.extras]
+colorama = ["colorama (>=0.4.3)"]
+d = ["aiohttp (>=3.7.4)", "aiohttp (>=3.7.4,!=3.9.0)"]
+jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
+uvloop = ["uvloop (>=0.15.2)"]
+
+[[package]]
 name = "bleach"
 version = "6.1.0"
 description = "An easy safelist-based HTML-sanitizing tool."
@@ -457,32 +498,32 @@ css = ["tinycss2 (>=1.1.0,<1.3)"]
 
 [[package]]
 name = "boto3"
-version = "1.33.1"
+version = "1.33.13"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.33.1-py3-none-any.whl", hash = "sha256:fa5aa92d16763cb906fb4a83d6eba887342202a980bea07862af5ba40827aa5a"},
-    {file = "boto3-1.33.1.tar.gz", hash = "sha256:1fe5fa75ff0f0c29a6f55e818d149d33571731e692a7b785ded7a28ac832cae8"},
+    {file = "boto3-1.33.13-py3-none-any.whl", hash = "sha256:5f278b95fb2b32f3d09d950759a05664357ba35d81107bab1537c4ddd212cd8c"},
+    {file = "boto3-1.33.13.tar.gz", hash = "sha256:0e966b8a475ecb06cc0846304454b8da2473d4c8198a45dfb2c5304871986883"},
 ]
 
 [package.dependencies]
-botocore = ">=1.33.1,<1.34.0"
+botocore = ">=1.33.13,<1.34.0"
 jmespath = ">=0.7.1,<2.0.0"
-s3transfer = ">=0.8.0,<0.9.0"
+s3transfer = ">=0.8.2,<0.9.0"
 
 [package.extras]
 crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.33.1"
+version = "1.33.13"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.33.1-py3-none-any.whl", hash = "sha256:c744b90980786c610dd9ad9c50cf2cdde3f1c4634b954a33613f6f8a1865a1de"},
-    {file = "botocore-1.33.1.tar.gz", hash = "sha256:d22d29916905e5f0670b91f07688e92b2c4a2075f9a474d6edbe7d22040d8fbf"},
+    {file = "botocore-1.33.13-py3-none-any.whl", hash = "sha256:aeadccf4b7c674c7d47e713ef34671b834bc3e89723ef96d994409c9f54666e6"},
+    {file = "botocore-1.33.13.tar.gz", hash = "sha256:fb577f4cb175605527458b04571451db1bd1a2036976b626206036acd4496617"},
 ]
 
 [package.dependencies]
@@ -1219,13 +1260,13 @@ pgp = ["gpg"]
 
 [[package]]
 name = "dvc"
-version = "3.33.3"
+version = "3.33.4"
 description = "Git for data scientists - manage your code and data together"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dvc-3.33.3-py3-none-any.whl", hash = "sha256:0c92e625671ac9b649a51076eb4ace6a0c68be43d3f840d013d4adcee4bf48a2"},
-    {file = "dvc-3.33.3.tar.gz", hash = "sha256:a0bf0712cfe5db204f434021299de5149a947072af9882c4baacdb76d0ece99b"},
+    {file = "dvc-3.33.4-py3-none-any.whl", hash = "sha256:130881585e4d96b1c7ed29b15466bbad70add00ad8823a2b5573fa7702f0ef3a"},
+    {file = "dvc-3.33.4.tar.gz", hash = "sha256:2458852fc21762ed8384073e17575f3f7b60cdd22a31a7d1a55083a89ede8dd9"},
 ]
 
 [package.dependencies]
@@ -1233,7 +1274,7 @@ colorama = ">=0.3.9"
 configobj = ">=5.0.6"
 distro = ">=1.3"
 dpath = ">=2.1.0,<3"
-dvc-data = ">=2.22.6,<2.23.0"
+dvc-data = ">=2.24,<2.25"
 dvc-http = ">=2.29.0"
 dvc-render = ">=1.0.0,<2"
 dvc-studio-client = ">=0.17.1,<1"
@@ -1285,40 +1326,41 @@ webhdfs-kerberos = ["dvc-webhdfs[kerberos] (==2.19)"]
 
 [[package]]
 name = "dvc-data"
-version = "2.22.6"
-description = "dvc data"
+version = "2.24.0"
+description = "DVC's data management subsystem"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dvc-data-2.22.6.tar.gz", hash = "sha256:8be52058a41acd18fe63f7fd431d1b868570292d1204086b9c44343ac053db24"},
-    {file = "dvc_data-2.22.6-py3-none-any.whl", hash = "sha256:171453a0285331441781a82af19189aae10bd0613e448033412f5b2ed0243f69"},
+    {file = "dvc-data-2.24.0.tar.gz", hash = "sha256:521cc4c751fafe115d2576ce69aae14b55d8c5946a09d44bb57908cada9ee3bf"},
+    {file = "dvc_data-2.24.0-py3-none-any.whl", hash = "sha256:dce7492758857c2bc26d823b1d6305d36313e0b2c2f771b31bfdd6c908dbb889"},
 ]
 
 [package.dependencies]
 attrs = ">=21.3.0"
 dictdiffer = ">=0.8.1"
 diskcache = ">=5.2.1"
-dvc-objects = ">=1.4.9,<2"
+dvc-objects = ">=2,<3"
 funcy = ">=1.14"
 pygtrie = ">=2.3.2"
 shortuuid = ">=0.5.0"
 sqltrie = ">=0.9.0,<1"
+tqdm = ">=4.63.1,<5"
 
 [package.extras]
 all = ["dvc-data[cli]"]
 cli = ["rich (>=10.11.0,<14.0.0)", "typer[all] (>=0.6)"]
-dev = ["blake3 (>=0.3.1)", "dvc-data[all]", "dvc-data[tests]"]
-tests = ["mypy (==1.5.1)", "pytest (==7.2.0)", "pytest-benchmark (==4.0.0)", "pytest-cov (==4.0.0)", "pytest-mock (==3.10.0)", "pytest-servers[s3] (==0.1.3)", "pytest-sugar (==0.9.6)"]
+dev = ["blake3 (>=0.3.1)", "dvc-data[all]", "dvc-data[tests]", "mypy (==1.7.1)", "types-tqdm"]
+tests = ["pytest (>=7,<8)", "pytest-benchmark (>=4)", "pytest-cov (>=4.1.0)", "pytest-mock", "pytest-servers[s3] (==0.1.3)", "pytest-sugar"]
 
 [[package]]
 name = "dvc-http"
-version = "2.31.0"
+version = "2.32.0"
 description = "http plugin for dvc"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dvc-http-2.31.0.tar.gz", hash = "sha256:5b24b3edaee25b7a08f8cf260e63ead445ab18150faff0c033365dc8b9fb787f"},
-    {file = "dvc_http-2.31.0-py3-none-any.whl", hash = "sha256:84e3a68aa50231ebff7bfdb91698ad0d6afd8e933fe3dfd8f462e57b3ec97dd1"},
+    {file = "dvc-http-2.32.0.tar.gz", hash = "sha256:f714f8435634aab943c625f659ddac1188c6ddaf3ff161b39715b83ff39637fc"},
+    {file = "dvc_http-2.32.0-py3-none-any.whl", hash = "sha256:1bfd57a9eae3cbfa1db564d90d87003841921a644ab35f3f7735c641cc93d72e"},
 ]
 
 [package.dependencies]
@@ -1330,26 +1372,23 @@ tests = ["dvc[testing]", "flaky (==3.7.0)", "mypy (==0.910)", "pylint (==2.15.9)
 
 [[package]]
 name = "dvc-objects"
-version = "1.4.9"
-description = "dvc objects"
+version = "2.0.1"
+description = "dvc objects - filesystem and object-db level abstractions to use in dvc and dvc-data"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dvc-objects-1.4.9.tar.gz", hash = "sha256:40f739a7678bcf35742d6b8fbfaeb3ba01a8b4c9e6f99f2e841b184aea7be74e"},
-    {file = "dvc_objects-1.4.9-py3-none-any.whl", hash = "sha256:d40a746db91b214bfcaf5c6de7202b984b1ecc9b9ae9b1114cfc4bf716b03951"},
+    {file = "dvc-objects-2.0.1.tar.gz", hash = "sha256:444566cb95c452f186f50ac08a9972f32c33d496c82f8a334b58317f243e3d37"},
+    {file = "dvc_objects-2.0.1-py3-none-any.whl", hash = "sha256:fcf104495ee2d7dc9fe53644b16abbe3c221255188a812e505b147d7a6e6b414"},
 ]
 
 [package.dependencies]
 fsspec = ">=2022.10.0"
 funcy = ">=1.14"
-packaging = ">=19"
 shortuuid = ">=0.5.0"
-tqdm = ">=4.63.1,<5"
-typing-extensions = ">=3.7.4"
 
 [package.extras]
-dev = ["dvc-objects[tests]", "types-tqdm"]
-tests = ["mypy (==1.5.1)", "pytest (==7.2.0)", "pytest-benchmark", "pytest-cov (==4.0.0)", "pytest-mock (==3.8.2)", "pytest-servers[s3] (==0.1.3)", "pytest-sugar (==0.9.6)", "reflink"]
+dev = ["dvc-objects[tests]", "mypy (==1.7.1)", "types-tqdm", "typing-extensions (>=3.7.4)"]
+tests = ["pytest (>=7,<8)", "pytest-benchmark", "pytest-cov (>=4.1.0)", "pytest-mock", "pytest-sugar", "reflink", "tqdm (>=4.63.1,<5)"]
 
 [[package]]
 name = "dvc-render"
@@ -1391,13 +1430,13 @@ tests = ["Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "dvc[testing]", 
 
 [[package]]
 name = "dvc-studio-client"
-version = "0.17.1"
+version = "0.18.0"
 description = "Small library to post data from DVC/DVCLive to Iterative Studio"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dvc-studio-client-0.17.1.tar.gz", hash = "sha256:afda43f563c85ae4b60f01456d0ce1bd6a498880b9c5e48bf5ff3b033fa86f81"},
-    {file = "dvc_studio_client-0.17.1-py3-none-any.whl", hash = "sha256:bfdb2ed3e3a8f1f6a7dbfb45896053b10196a49d06d971d3e06571ca13677167"},
+    {file = "dvc-studio-client-0.18.0.tar.gz", hash = "sha256:41d2ee96bfb3784fad2d71508938197b0917445946090b3bb5ad53354fa35fcc"},
+    {file = "dvc_studio_client-0.18.0-py3-none-any.whl", hash = "sha256:eac41a74af46a313553b09948e0dc47d1be8ccfbea4513d54cd82bc32a480c4e"},
 ]
 
 [package.dependencies]
@@ -1498,13 +1537,13 @@ tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipyth
 
 [[package]]
 name = "fastapi"
-version = "0.104.1"
+version = "0.105.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "fastapi-0.104.1-py3-none-any.whl", hash = "sha256:752dc31160cdbd0436bb93bad51560b57e525cbb1d4bbf6f4904ceee75548241"},
-    {file = "fastapi-0.104.1.tar.gz", hash = "sha256:e5e4540a7c5e1dcfbbcf5b903c234feddcdcd881f191977a1c5dfd917487e7ae"},
+    {file = "fastapi-0.105.0-py3-none-any.whl", hash = "sha256:f19ebf6fdc82a3281d10f2cb4774bdfa90238e3b40af3525a0c09fd08ad1c480"},
+    {file = "fastapi-0.105.0.tar.gz", hash = "sha256:4d12838819aa52af244580675825e750ad67c9df4614f557a769606af902cf22"},
 ]
 
 [package.dependencies]
@@ -1602,6 +1641,22 @@ files = [
 docs = ["furo (>=2023.9.10)", "sphinx (>=7.2.6)", "sphinx-autodoc-typehints (>=1.24)"]
 testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8)", "pytest (>=7.4.3)", "pytest-cov (>=4.1)", "pytest-mock (>=3.12)", "pytest-timeout (>=2.2)"]
 typing = ["typing-extensions (>=4.8)"]
+
+[[package]]
+name = "flake8"
+version = "6.1.0"
+description = "the modular source code checker: pep8 pyflakes and co"
+optional = false
+python-versions = ">=3.8.1"
+files = [
+    {file = "flake8-6.1.0-py2.py3-none-any.whl", hash = "sha256:ffdfce58ea94c6580c77888a86506937f9a1a227dfcd15f245d694ae20a6b6e5"},
+    {file = "flake8-6.1.0.tar.gz", hash = "sha256:d5b3857f07c030bdb5bf41c7f53799571d75c4491748a3adcd47de929e34cd23"},
+]
+
+[package.dependencies]
+mccabe = ">=0.7.0,<0.8.0"
+pycodestyle = ">=2.11.0,<2.12.0"
+pyflakes = ">=3.1.0,<3.2.0"
 
 [[package]]
 name = "flatten-dict"
@@ -1780,13 +1835,13 @@ files = [
 
 [[package]]
 name = "fsspec"
-version = "2023.12.1"
+version = "2023.12.2"
 description = "File-system specification"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "fsspec-2023.12.1-py3-none-any.whl", hash = "sha256:6271f1d3075a378bfe432f6f42bf7e1d2a6ba74f78dd9b512385474c579146a0"},
-    {file = "fsspec-2023.12.1.tar.gz", hash = "sha256:c4da01a35ac65c853f833e43f67802c25213f560820d54ddf248f92eddd5e990"},
+    {file = "fsspec-2023.12.2-py3-none-any.whl", hash = "sha256:d800d87f72189a745fa3d6b033b9dc4a34ad069f60ca60b943a63599f5501960"},
+    {file = "fsspec-2023.12.2.tar.gz", hash = "sha256:8548d39e8810b59c38014934f6b31e57f40c1b20f911f4cc2b85389c7e9bf0cb"},
 ]
 
 [package.dependencies]
@@ -2123,6 +2178,20 @@ files = [
 arrow = ">=0.15.0"
 
 [[package]]
+name = "isort"
+version = "5.13.2"
+description = "A Python utility / library to sort Python imports."
+optional = false
+python-versions = ">=3.8.0"
+files = [
+    {file = "isort-5.13.2-py3-none-any.whl", hash = "sha256:8ca5e72a8d85860d5a3fa69b8745237f2939afe12dbf656afbcb47fe72d947a6"},
+    {file = "isort-5.13.2.tar.gz", hash = "sha256:48fdfcb9face5d58a4f6dde2e72a1fb8dcaf8ab26f95ab49fab84c2ddefb0109"},
+]
+
+[package.extras]
+colors = ["colorama (>=0.4.6)"]
+
+[[package]]
 name = "iterative-telemetry"
 version = "0.0.8"
 description = "Common library for sending telemetry"
@@ -2432,13 +2501,13 @@ test = ["flaky", "ipykernel", "pre-commit", "pytest (>=7.0)", "pytest-console-sc
 
 [[package]]
 name = "jupyter-server-terminals"
-version = "0.4.4"
+version = "0.5.0"
 description = "A Jupyter Server Extension Providing Terminals."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jupyter_server_terminals-0.4.4-py3-none-any.whl", hash = "sha256:75779164661cec02a8758a5311e18bb8eb70c4e86c6b699403100f1585a12a36"},
-    {file = "jupyter_server_terminals-0.4.4.tar.gz", hash = "sha256:57ab779797c25a7ba68e97bcfb5d7740f2b5e8a83b5e8102b10438041a7eac5d"},
+    {file = "jupyter_server_terminals-0.5.0-py3-none-any.whl", hash = "sha256:2fc0692c883bfd891f4fba0c4b4a684a37234b0ba472f2e97ed0a3888f46e1e4"},
+    {file = "jupyter_server_terminals-0.5.0.tar.gz", hash = "sha256:ebcd68c9afbf98a480a533e6f3266354336e645536953b7abcc7bdeebc0154a3"},
 ]
 
 [package.dependencies]
@@ -2446,8 +2515,8 @@ pywinpty = {version = ">=2.0.3", markers = "os_name == \"nt\""}
 terminado = ">=0.8.3"
 
 [package.extras]
-docs = ["jinja2", "jupyter-server", "mistune (<3.0)", "myst-parser", "nbformat", "packaging", "pydata-sphinx-theme", "sphinxcontrib-github-alt", "sphinxcontrib-openapi", "sphinxcontrib-spelling", "sphinxemoji", "tornado"]
-test = ["coverage", "jupyter-server (>=2.0.0)", "pytest (>=7.0)", "pytest-cov", "pytest-jupyter[server] (>=0.5.3)", "pytest-timeout"]
+docs = ["jinja2", "jupyter-server", "mistune (<4.0)", "myst-parser", "nbformat", "packaging", "pydata-sphinx-theme", "sphinxcontrib-github-alt", "sphinxcontrib-openapi", "sphinxcontrib-spelling", "sphinxemoji", "tornado"]
+test = ["jupyter-server (>=2.0.0)", "pytest (>=7.0)", "pytest-jupyter[server] (>=0.5.3)", "pytest-timeout"]
 
 [[package]]
 name = "jupyterlab"
@@ -2817,6 +2886,17 @@ files = [
 traitlets = "*"
 
 [[package]]
+name = "mccabe"
+version = "0.7.0"
+description = "McCabe checker, plugin for flake8"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
+    {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
+]
+
+[[package]]
 name = "mdurl"
 version = "0.1.2"
 description = "Markdown URL utilities"
@@ -2919,6 +2999,17 @@ files = [
     {file = "multidict-6.0.4-cp39-cp39-win32.whl", hash = "sha256:27c523fbfbdfd19c6867af7346332b62b586eed663887392cff78d614f9ec313"},
     {file = "multidict-6.0.4-cp39-cp39-win_amd64.whl", hash = "sha256:33029f5734336aa0d4c0384525da0387ef89148dc7191aae00ca5fb23d7aafc2"},
     {file = "multidict-6.0.4.tar.gz", hash = "sha256:3666906492efb76453c0e7b97f2cf459b0682e7402c0489a95484965dbc1da49"},
+]
+
+[[package]]
+name = "mypy-extensions"
+version = "1.0.0"
+description = "Type system extensions for programs checked with the mypy type checker."
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
+    {file = "mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
 ]
 
 [[package]]
@@ -3306,13 +3397,13 @@ testing = ["docopt", "pytest (<6.0.0)"]
 
 [[package]]
 name = "pathspec"
-version = "0.11.2"
+version = "0.12.1"
 description = "Utility library for gitignore style pattern matching of file paths."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pathspec-0.11.2-py3-none-any.whl", hash = "sha256:1d6ed233af05e679efb96b1851550ea95bbb64b7c490b0f5aa52996c11e92a20"},
-    {file = "pathspec-0.11.2.tar.gz", hash = "sha256:e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3"},
+    {file = "pathspec-0.12.1-py3-none-any.whl", hash = "sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08"},
+    {file = "pathspec-0.12.1.tar.gz", hash = "sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712"},
 ]
 
 [[package]]
@@ -3460,13 +3551,13 @@ twisted = ["twisted"]
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.41"
+version = "3.0.43"
 description = "Library for building powerful interactive command lines in Python"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "prompt_toolkit-3.0.41-py3-none-any.whl", hash = "sha256:f36fe301fafb7470e86aaf90f036eef600a3210be4decf461a5b1ca8403d3cb2"},
-    {file = "prompt_toolkit-3.0.41.tar.gz", hash = "sha256:941367d97fc815548822aa26c2a269fdc4eb21e9ec05fc5d447cf09bad5d75f0"},
+    {file = "prompt_toolkit-3.0.43-py3-none-any.whl", hash = "sha256:a11a29cb3bf0a28a387fe5122cdb649816a957cd9261dcedf8c9f1fef33eacf6"},
+    {file = "prompt_toolkit-3.0.43.tar.gz", hash = "sha256:3527b7af26106cbc65a040bcc84839a3566ec1b051bb0bfe953631e704b0ff7d"},
 ]
 
 [package.dependencies]
@@ -3572,6 +3663,17 @@ files = [
 
 [package.dependencies]
 numpy = ">=1.16.6"
+
+[[package]]
+name = "pycodestyle"
+version = "2.11.1"
+description = "Python style guide checker"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pycodestyle-2.11.1-py2.py3-none-any.whl", hash = "sha256:44fe31000b2d866f2e41841b18528a505fbd7fef9017b04eff4e2648a0fadc67"},
+    {file = "pycodestyle-2.11.1.tar.gz", hash = "sha256:41ba0e7afc9752dfb53ced5489e89f8186be00e599e712660695b7a75ff2663f"},
+]
 
 [[package]]
 name = "pycparser"
@@ -3733,6 +3835,17 @@ files = [
 
 [package.dependencies]
 pyparsing = ">=2.1.4"
+
+[[package]]
+name = "pyflakes"
+version = "3.1.0"
+description = "passive checker of Python programs"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyflakes-3.1.0-py2.py3-none-any.whl", hash = "sha256:4132f6d49cb4dae6819e5379898f2b8cce3c5f23994194c24b77d5da2e36f774"},
+    {file = "pyflakes-3.1.0.tar.gz", hash = "sha256:a0aae034c444db0071aa077972ba4768d40c830d9539fd45bf4cd3f8f6992efc"},
+]
 
 [[package]]
 name = "pygit2"
@@ -4436,19 +4549,19 @@ files = [
 
 [[package]]
 name = "s3fs"
-version = "2023.12.1"
+version = "2023.12.2"
 description = "Convenient Filesystem interface over S3"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "s3fs-2023.12.1-py3-none-any.whl", hash = "sha256:ed0b7df8cc20a2b5cefe607b1cf4e860d37c5ca4ac2d68f55464805d75d18710"},
-    {file = "s3fs-2023.12.1.tar.gz", hash = "sha256:63e429bb6b5e814568cacd3f2a8551fc35493e8c418ddfcb44e6f86aa8696ccd"},
+    {file = "s3fs-2023.12.2-py3-none-any.whl", hash = "sha256:0d5a99039665f30b2dbee5495de3b299a022d51b3195a9440f5df47c2621b777"},
+    {file = "s3fs-2023.12.2.tar.gz", hash = "sha256:b5ec07062481bbb45cb061b31984c7188d106e292c27033039e024e4ba5740dc"},
 ]
 
 [package.dependencies]
 aiobotocore = ">=2.5.4,<3.0.0"
 aiohttp = "<4.0.0a0 || >4.0.0a0,<4.0.0a1 || >4.0.0a1"
-fsspec = "2023.12.1"
+fsspec = "2023.12.2"
 
 [package.extras]
 awscli = ["aiobotocore[awscli] (>=2.5.4,<3.0.0)"]
@@ -4456,20 +4569,20 @@ boto3 = ["aiobotocore[boto3] (>=2.5.4,<3.0.0)"]
 
 [[package]]
 name = "s3transfer"
-version = "0.8.0"
+version = "0.8.2"
 description = "An Amazon S3 Transfer Manager"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "s3transfer-0.8.0-py3-none-any.whl", hash = "sha256:baa479dc2e63e5c2ed51611b4d46cdf0295e2070d8d0b86b22f335ee5b954986"},
-    {file = "s3transfer-0.8.0.tar.gz", hash = "sha256:e8d6bd52ffd99841e3a57b34370a54841f12d3aab072af862cdcc50955288002"},
+    {file = "s3transfer-0.8.2-py3-none-any.whl", hash = "sha256:c9e56cbe88b28d8e197cf841f1f0c130f246595e77ae5b5a05b69fe7cb83de76"},
+    {file = "s3transfer-0.8.2.tar.gz", hash = "sha256:368ac6876a9e9ed91f6bc86581e319be08188dc60d50e0d56308ed5765446283"},
 ]
 
 [package.dependencies]
-botocore = ">=1.32.7,<2.0a.0"
+botocore = ">=1.33.2,<2.0a.0"
 
 [package.extras]
-crt = ["botocore[crt] (>=1.32.7,<2.0a.0)"]
+crt = ["botocore[crt] (>=1.33.2,<2.0a.0)"]
 
 [[package]]
 name = "scikit-learn"
@@ -4562,20 +4675,20 @@ test = ["asv", "gmpy2", "mpmath", "pooch", "pytest", "pytest-cov", "pytest-timeo
 
 [[package]]
 name = "scmrepo"
-version = "1.5.0"
-description = "SCM wrapper and fsspec filesystem for Git for use in DVC"
+version = "1.6.0"
+description = "scmrepo"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "scmrepo-1.5.0-py3-none-any.whl", hash = "sha256:d6c3d3b565b0a44dc3376fedd0873751aef1c2a30e1862afd13b3864fb4a95ba"},
-    {file = "scmrepo-1.5.0.tar.gz", hash = "sha256:d0c55295853be011342c6a58ed373dfeb7f501966d1b346ed2e649ef3d388604"},
+    {file = "scmrepo-1.6.0-py3-none-any.whl", hash = "sha256:389c3ae694309c62268ce193d149a5bd344af28306943fe332a9907b0cb6d0fb"},
+    {file = "scmrepo-1.6.0.tar.gz", hash = "sha256:0092c3f99da7db327602fb1f655b9cca9a936ffabee7ab79eb6be23d627af7a2"},
 ]
 
 [package.dependencies]
 asyncssh = ">=2.13.1,<3"
 dulwich = ">=0.21.6"
 dvc-http = ">=2.29.0"
-dvc-objects = ">=1.0.1,<2"
+dvc-objects = ">=1.0.1,<3"
 fsspec = ">=2021.7.0"
 funcy = ">=1.14"
 gitpython = ">3"
@@ -4585,8 +4698,8 @@ pygtrie = ">=2.3.2"
 shortuuid = ">=0.5.0"
 
 [package.extras]
-dev = ["mock (==5.1.0)", "mypy (==0.971)", "paramiko (==3.3.1)", "pylint (==2.15.0)", "pytest (==7.2.0)", "pytest-asyncio (==0.18.3)", "pytest-cov (==3.0.0)", "pytest-docker (==0.12.0)", "pytest-mock (==3.8.2)", "pytest-sugar (==0.9.5)", "pytest-test-utils (==0.0.8)", "types-certifi (==2021.10.8.3)", "types-mock (==5.1.0.2)", "types-paramiko (==3.3.0.0)"]
-tests = ["mock (==5.1.0)", "mypy (==0.971)", "paramiko (==3.3.1)", "pylint (==2.15.0)", "pytest (==7.2.0)", "pytest-asyncio (==0.18.3)", "pytest-cov (==3.0.0)", "pytest-docker (==0.12.0)", "pytest-mock (==3.8.2)", "pytest-sugar (==0.9.5)", "pytest-test-utils (==0.0.8)", "types-certifi (==2021.10.8.3)", "types-mock (==5.1.0.2)", "types-paramiko (==3.3.0.0)"]
+dev = ["scmrepo[tests]"]
+tests = ["mock (==5.1.0)", "mypy (==0.971)", "paramiko (==3.3.1)", "pytest (==7.2.0)", "pytest-asyncio (==0.18.3)", "pytest-cov (==3.0.0)", "pytest-docker (==0.12.0)", "pytest-mock (==3.8.2)", "pytest-sugar (==0.9.5)", "pytest-test-utils (==0.0.8)", "types-certifi (==2021.10.8.3)", "types-mock (==5.1.0.2)", "types-paramiko (==3.3.0.0)"]
 
 [[package]]
 name = "seaborn"
@@ -4723,13 +4836,13 @@ files = [
 
 [[package]]
 name = "sqltrie"
-version = "0.9.0"
+version = "0.10.0"
 description = "SQL-based prefix tree inspired by pygtrie and python-diskcache"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sqltrie-0.9.0-py3-none-any.whl", hash = "sha256:037e5ae614d94ce19cf49d802af4e2a1091f8bc0914c225e580b7a871723f19e"},
-    {file = "sqltrie-0.9.0.tar.gz", hash = "sha256:a5b3a0794156d509b6d721a8abba2241e86858d8a957c86c53a9cbede5cdbe41"},
+    {file = "sqltrie-0.10.0-py3-none-any.whl", hash = "sha256:f09902425a30428bc6924535c14648881bf57450050cfb22bcdc473caf8d4031"},
+    {file = "sqltrie-0.10.0.tar.gz", hash = "sha256:ce25bd13ee1865fba2f7f5429c9881ea777f9cdc10d4a5291310516b0465d26b"},
 ]
 
 [package.dependencies]
@@ -4991,13 +5104,13 @@ files = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.8.0"
+version = "4.9.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "typing_extensions-4.8.0-py3-none-any.whl", hash = "sha256:8f92fc8806f9a6b641eaa5318da32b44d401efaac0f6678c9bc448ba3605faa0"},
-    {file = "typing_extensions-4.8.0.tar.gz", hash = "sha256:df8e4339e9cb77357558cbdbceca33c303714cf861d1eef15e1070055ae8b7ef"},
+    {file = "typing_extensions-4.9.0-py3-none-any.whl", hash = "sha256:af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd"},
+    {file = "typing_extensions-4.9.0.tar.gz", hash = "sha256:23478f88c37f27d76ac8aee6c905017a143b0b1b886c3c9f66bc2fd94f9f5783"},
 ]
 
 [[package]]
@@ -5348,4 +5461,4 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a7c01fd8e4827609ff0a89800b5ca31b66f00d78ff4d779b2a1957effe469b37"
+content-hash = "da68c1660d071e95f072ee46a5666f8c6352272e2821b5b266695358465ab4b4"

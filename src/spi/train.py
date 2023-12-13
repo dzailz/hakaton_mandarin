@@ -1,21 +1,27 @@
-import pandas as pd
-import pickle
 import logging
-
+import pickle
 from pathlib import Path
-from dvclive import Live
-from box import ConfigBox
-from ruamel.yaml import YAML
-from sklearn.metrics import classification_report, f1_score, roc_auc_score, roc_curve, auc
 
-from settings import DVC_PARAMS_FILE, MODELS_FOLDER, DATASETS_FOLDER, RESULTS_FOLDER, DVC_YAML_FILE
+import pandas as pd
+from box import ConfigBox
+from dvclive import Live
+from ruamel.yaml import YAML
+from sklearn.metrics import classification_report, f1_score, roc_auc_score
+
+from settings import (
+    DATASETS_FOLDER,
+    DVC_PARAMS_FILE,
+    DVC_YAML_FILE,
+    MODELS_FOLDER,
+    RESULTS_FOLDER,
+)
 from src.models.common.split import data_split
 from src.models.random_forest.random_forest import RandomForest
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-yaml = YAML(typ='safe')
+yaml = YAML(typ="safe")
 
 params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
 
@@ -44,16 +50,12 @@ def train_predict_rf(df: pd.DataFrame, bank: str):
         with Live(dir=RESULTS_FOLDER, dvcyaml=DVC_YAML_FILE) as live:
             # Log the number of estimators as a parameter
             live.log_param("n_estimators", n_estimators)
-
             # Initialize a RandomForest instance
             rf = RandomForest(df=df, bank=bank, n_estimators=n_estimators)
-
             # Apply SMOTE to the data
             rf.add_smote()
-
             # Split the data into training and testing sets
             X_train, X_test, y_train, y_test = data_split(rf.X_resampled, rf.y_resampled)
-
             # Fit the model to the training data
             model = rf.fit(X_train, y_train)
             # Predict the testing data
@@ -73,14 +75,8 @@ def train_predict_rf(df: pd.DataFrame, bank: str):
             live.log_metric(f"test/{bank}ROC_AUC", roc_auc_score_test, plot=False)
             logger.info(f"{bank}_ROC AUC score: {roc_auc_score_test}")
             # Log the confusion matrix, ROC curve, and precision-recall curve for the testing data
-            live.log_sklearn_plot(
-                "confusion_matrix",
-                y_test,
-                y_test_pred,
-                name=f"test/{bank}_confusion_matrix",
-                title=f"Test {bank} Confusion Matrix"
-            )
-            y_test = y_test.replace({'denied': 0, 'success': 1})
+            live.log_sklearn_plot("confusion_matrix", y_test, y_test_pred, name=f"test/{bank}_confusion_matrix", title=f"Test {bank} Confusion Matrix")
+            y_test = y_test.replace({"denied": 0, "success": 1})
             live.log_sklearn_plot(
                 "roc",
                 y_test,
@@ -96,24 +92,18 @@ def train_predict_rf(df: pd.DataFrame, bank: str):
             model_name = f"random_forest_{n_estimators}_{bank}.pkl"
             # Save the trained model to a file
             model_path = Path(MODELS_FOLDER, model_name)
-            pickle.dump(model, open(model_path, 'wb'))
+            pickle.dump(model, open(model_path, "wb"))
 
             # Log the model as an artifact
-            live.log_artifact(
-                path=MODELS_FOLDER,
-                type="model",
-                name=model_name,
-                labels=[n_estimators, "random_forest", bank]
-            )
+            live.log_artifact(path=MODELS_FOLDER, type="model", name=model_name, labels=[n_estimators, "random_forest", bank])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import re
 
-    for df_path in Path(DATASETS_FOLDER).glob('*.parquet'):
-        if re.search(r'bank_(\w+)', df_path.name):
-            bank_name = re.search(r'bank_(\w+)', df_path.name).group(0)
+    for df_path in Path(DATASETS_FOLDER).glob("*.parquet"):
+        if re.search(r"bank_(\w+)", df_path.name):
+            bank_name = re.search(r"bank_(\w+)", df_path.name).group(0)
             df = pd.read_parquet(df_path)
-            df.drop('position', axis=1, inplace=True)
+            df.drop("position", axis=1, inplace=True)
             train_predict_rf(df=df.copy(), bank=bank_name)
-

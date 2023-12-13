@@ -1,29 +1,26 @@
 from typing import Any, Literal, Mapping, Sequence
 
+from imblearn.over_sampling import SMOTE
 from pandas import DataFrame
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import f1_score, classification_report, confusion_matrix, roc_auc_score
-from sklearn.preprocessing import StandardScaler
-
-from imblearn.over_sampling import SMOTE
 
 
 class RandomForest(RandomForestClassifier):
     def __init__(
-            self,
-            df: DataFrame,
-            bank: str | None = None,
-            n_estimators: int = 100,
-            random_state: int = 42,
-            criterion: Literal['gini', 'entropy', 'log_loss'] = "gini",
-            max_features: float | int | Literal['sqrt', 'log2'] = "sqrt",
-            class_weight: Mapping | Sequence[Mapping] | Literal['balanced', 'balanced_subsample'] | None = None,
-            X_resampled: Any | None = None,
-            y_resampled: Any | None = None,
-            X_train: Any | None = None,
-            X_test: Any | None = None,
-            y_train: Any | None = None,
-            y_test: Any | None = None,
+        self,
+        df: DataFrame,
+        bank: str | None = None,
+        n_estimators: int = 100,
+        random_state: int = 42,
+        criterion: Literal["gini", "entropy", "log_loss"] = "gini",
+        max_features: float | int | Literal["sqrt", "log2"] = "sqrt",
+        class_weight: Mapping | Sequence[Mapping] | Literal["balanced", "balanced_subsample"] | None = None,
+        X_resampled: Any | None = None,
+        y_resampled: Any | None = None,
+        X_train: Any | None = None,
+        X_test: Any | None = None,
+        y_train: Any | None = None,
+        y_test: Any | None = None,
     ):
         self.df = df
         self.bank = bank
@@ -35,13 +32,7 @@ class RandomForest(RandomForestClassifier):
         self.y_train = y_train
         self.y_test = y_test
 
-        super().__init__(
-            n_estimators=n_estimators,
-            random_state=random_state,
-            criterion=criterion,
-            max_features=max_features,
-            class_weight=class_weight
-        )
+        super().__init__(n_estimators=n_estimators, random_state=random_state, criterion=criterion, max_features=max_features, class_weight=class_weight)
 
     @staticmethod
     def numerics_and_non_numerics(df: DataFrame) -> tuple[list[str], list[str]]:
@@ -49,10 +40,10 @@ class RandomForest(RandomForestClassifier):
         Extract numeric and non-numeric columns from a DataFrame
         """
         # Extract numerical columns
-        numeric_columns = df.select_dtypes(include=['number']).columns
+        numeric_columns = df.select_dtypes(include=["number"]).columns
 
         # Extract non-numeric columns, including datetime columns
-        non_numeric_columns = df.select_dtypes(exclude=['number']).columns
+        non_numeric_columns = df.select_dtypes(exclude=["number"]).columns
 
         return numeric_columns, non_numeric_columns
 
@@ -62,13 +53,28 @@ class RandomForest(RandomForestClassifier):
         Convert datetime columns to numeric (year only)
         """
         for column in non_numeric_columns:
-            if df[column].dtype == 'datetime64[ns]':
+            if df[column].dtype == "datetime64[ns]":
                 df[column] = df[column].dt.year
 
-    def add_smote(self, df: DataFrame = None, numeric_columns: list[str] | None = None,
-                  non_numeric_columns: list[str] | None = None):
+    def add_smote(self, df: DataFrame = None, numeric_columns: list[str] | None = None, non_numeric_columns: list[str] | None = None):
         """
-        Add SMOTE to the data
+        Apply Synthetic Minority Over-sampling Technique (SMOTE) to the data.
+
+        This method applies SMOTE to the data to balance the classes in the target variable.
+        It first separates the features and the target variable, then applies SMOTE to the features and target variable.
+        The resampled features and target variable are then stored in the instance variables self.X_resampled and self.y_resampled.
+
+        Args:
+            df (DataFrame, optional): The DataFrame to apply SMOTE to. If not provided, the instance variable self.df is used.
+            numeric_columns (list[str] | None, optional): The list of numeric column names. If not provided, it is extracted from the DataFrame.
+            non_numeric_columns (list[str] | None, optional): The list of non-numeric column names. If not provided, it is extracted from the DataFrame.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If the DataFrame is empty or if the target variable column does not exist in the DataFrame.
+            TypeError: If the input data is not of the correct type.
         """
         # Extract numerical columns
         if not df:
@@ -87,6 +93,3 @@ class RandomForest(RandomForestClassifier):
         X_resampled, y_resampled = SMOTE().fit_resample(X, y)
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
-
-    def save_to_pickle(self, path: str):
-        pass
