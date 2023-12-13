@@ -24,8 +24,16 @@ poetry install
 На основе анализа объема данных с заданными параметрами, ML-модель оценивает возможность получения займа клиентом в конкретных банках. Результаты модели могут быть использованы для принятия решений о выдаче займов и оптимизации конверсии бизнеса.
 
 ## Примеры ответа модели
-При подготовке проекта использовался python 3.11
-![image](https://github.com/dzailz/hakaton_mandarin/Precision_recall.jpeg)
+При подготовке проекта использовался python 3.11  
+
+#ROC auc  
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/%20ROC%20auc.jpeg)
+
+#Precision/recall  
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)  
+
+#Confusion matrix
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion%20matrix.jpeg)  
 
 ```json
 {
