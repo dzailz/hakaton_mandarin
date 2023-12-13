@@ -1,19 +1,19 @@
-from typing import Any
-from box import ConfigBox
-
-from ruamel.yaml import YAML
 from pathlib import Path
+from typing import Any
+
+from box import ConfigBox
+from ruamel.yaml import YAML
 from sklearn.model_selection import train_test_split
+
 from settings import DVC_PARAMS_FILE
 
-
-yaml = YAML(typ='safe')
+yaml = YAML(typ="safe")
 
 params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
 
 RANDOM_SEED = params.base.random_seed
 TEST_SIZE = params.base.test_size
-        
+
 
 def data_split(X: Any, y: Any, test_size: float = TEST_SIZE, random_state: int = RANDOM_SEED):
     """
@@ -34,4 +34,3 @@ def data_split(X: Any, y: Any, test_size: float = TEST_SIZE, random_state: int =
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
 
     return X_train, X_test, y_train, y_test
-
