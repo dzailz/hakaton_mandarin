@@ -24,4 +24,24 @@ class BankDecisionInput(BaseModel):
     goods_category: str
 
 
+class Probability(BaseModel):
+    denied: float
+    success: float
 
+
+class Prediction(str, Enum):
+    denied = "denied"
+    success = "success"
+
+
+class BankDecision(BaseModel):
+    prediction: Prediction
+    probability: Probability
+
+
+class BankDecisionOutput(BaseModel):
+    bank_a: BankDecision
+    bank_b: BankDecision
+    bank_c: BankDecision
+    bank_d: BankDecision
+    bank_e: BankDecision
