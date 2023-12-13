@@ -8,14 +8,14 @@
 
 ## Начало работы
 Для запуска проекта локально: 
-```bibtex 
+```shell 
 git clone git@github.com:dzailz/hakaton_mandarin.git
 ```
 - войти в терминал   
 - войти в папку с репозиторием    
 
 войти в виртуальное окружение и установить необходимые библиотеки
-```bibtex 
+```shell 
 poetry shell
 poetry install  
 ```
@@ -27,7 +27,7 @@ poetry install
 При подготовке проекта использовался python 3.11
 ![image](https://github.com/dzailz/hakaton_mandarin)
 
-```bibtex
+```json
 {
   "bank_a": {
     "prediction": "success",
