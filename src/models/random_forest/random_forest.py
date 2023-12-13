@@ -83,57 +83,10 @@ class RandomForest(RandomForestClassifier):
         X = df.drop(self.bank_decision, axis=1)
         y = df[self.bank_decision]
 
-        # Apply SMOTE after scaling numerical features
+        # Apply SMOTE
         X_resampled, y_resampled = SMOTE().fit_resample(X, y)
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
 
     def save_to_pickle(self, path: str):
         pass
-
-# if __name__ == '__main__':
-#     import pandas as pd
-#     import pickle
-#     from os import path
-#     from dvclive import Live
-#     from src.models.common.split import data_split
-
-
-#     df_path = path.join(path.dirname(__file__), '../../data/datasets/prepared_one_bank.parquet')
-
-#     df = pd.read_parquet(df_path)
-#     df.drop('position', axis=1, inplace=True)
-
-#     for n_estimators in (50, 100, 150):
-#         with Live() as live:
-#             live.log_param("n_estimators", n_estimators)
-#             rf = RandomForest(df=df, n_estimators=n_estimators)
-#             rf.add_smote()
-#             X_train, X_test, y_train, y_test = data_split(rf.X_resampled, rf.y_resampled)
-
-#             rf.fit(X_train, y_train)
-
-#             y_train_pred = rf.predict(X_train)
-
-#             live.log_metric("train/classification_report", classification_report(y_train, y_train_pred), plot=True)
-#             live.log_metric("train/f1", f1_score(y_train, y_train_pred, average="weighted"), plot=True)
-#             live.log_metric("ROC_AUC", roc_auc_score(y_train, rf.predict_proba(X_train)[:, 1]), plot=True)
-
-#             live.log_sklearn_plot(
-#                 "confusion_matrix", y_train, y_train_pred, name="train/confusion_matrix",
-#                 title="Train Confusion Matrix")
-
-#             y_test_pred = rf.predict(X_test)
-
-#             live.log_metric("test/classification_report", classification_report(y_test, y_test_pred), plot=False)
-#             live.log_metric("test/f1", f1_score(y_test, y_test_pred, average="weighted"), plot=False)
-#             live.log_metric("ROC_AUC", roc_auc_score(y_test, rf.predict_proba(X_test)[:, 1]), plot=False)
-
-#             live.log_sklearn_plot(
-#                 "confusion_matrix", y_test, y_test_pred, name="test/confusion_matrix",
-#                 title="Test Confusion Matrix")
-
-#             model_path = path.join(path.dirname(__file__),
-#                                    f'../../data/trained_models/random_forest_{n_estimators}.pkl')
-#             pickle.dump(rf, open(model_path, 'wb'))
-#             live.log_artifact(model_path)
