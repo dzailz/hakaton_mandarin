@@ -52,7 +52,7 @@ def predict_bank_decision(data: BankDecisionInput):
     # Convert input data to a DataFrame
     input_data = pd.DataFrame([data.model_dump()])
     # input_data = input_data.drop('position', axis=1)
-    dp = DataPreparation(df=input_data, ohe_model=ohe_model)
+    dp = DataPreparation(df=input_data, ohe_model=ohe_model, scaler=scaler)
     dp.index_as_int()
     dp.columns_to_type(columns=numeric_categorical_columns, dtype='UInt8')
     dp.columns_to_type(columns=money_columns, dtype='int64')
@@ -60,7 +60,7 @@ def predict_bank_decision(data: BankDecisionInput):
     dp.add_time_features()
 
     dp.transform_one_hot_encoder(is_new=False)
-    dp.df[money_columns] = scaler.fit_transform(dp.df[money_columns])
+    dp.df[money_columns] = scaler.transform(dp.df[money_columns])
     dp.drop_columns(columns=['position'])
     # Make predictions using the trained model
     predictions = []

@@ -291,24 +291,34 @@ class DataPreparation:
         # Transform the DataFrame using the pre-fitted one-hot encoder
         self.transform_one_hot_encoder(df, columns, is_new)
 
-    def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
-                                   is_new: bool = True, scaler_save_name: str | None = 'scaler.pkl'):
+    def fit_scaler(self, df: DataFrame | None = None, columns: list[str] | None = None,
+                   scaler_save_name: str | None = 'scaler.pkl', scaler_path: str | None = None):
         """
-        Normalize numeric columns using StandardScaler
-        Scaler is available in self.scaler
+        Fit the scaler on the specified columns.
+        Save the scaler for later use.
         """
-        scaler_path = Path(MODELS_FOLDER, scaler_save_name)
+        scaler_path = scaler_path or Path(MODELS_FOLDER, scaler_save_name)
         if df is None:
             df = self.df
         if columns is None:
             columns = ['month_profit', 'month_expense', 'loan_amount']
-        df[columns] = self.scaler.fit_transform(df[columns])
+        self.scaler.fit(df[columns])
+        pickle.dump(self.scaler, open(scaler_path, 'wb'))
+
+    def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
+                       is_new: bool = True):
+        """
+        Transform the specified columns using the previously fitted scaler.
+        """
+        if df is None:
+            df = self.df
+        columns = columns or ['month_profit', 'month_expense', 'loan_amount']
+        self.fit_scaler()
+        df[columns] = self.scaler.transform(df[columns])
         if is_new:
             self.normalized_df = df
-            pickle.dump(self.scaler, open(scaler_path, 'wb'))
         else:
             self.df = df
-            pickle.dump(self.scaler, open(scaler_path, 'wb'))
 
     def save_df(self, path: str, index: bool = False, compression='gzip'):
         """
