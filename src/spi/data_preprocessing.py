@@ -5,15 +5,15 @@ from src.data_preparation.data_preparation import DataPreparation
 
 class DataPreprocessing(DataPreparation):
     def __init__(
-            self,
-            df: DataFrame,
-            target_bank_col: str,
-            banks_cols: list[str],
-            banks_cols_to_drop: list[str],
-            categorical_columns: list[str],
-            numeric_categorical_columns: list[str],
-            money_columns: list[str],
-            to_drop_columns: list[str] | None = None,
+        self,
+        df: DataFrame,
+        target_bank_col: str,
+        banks_cols: list[str],
+        banks_cols_to_drop: list[str],
+        categorical_columns: list[str],
+        numeric_categorical_columns: list[str],
+        money_columns: list[str],
+        to_drop_columns: list[str] | None = None,
     ):
         super().__init__(df=df, to_drop_columns=to_drop_columns, target_bank_col=target_bank_col)
         self.banks_cols = banks_cols
@@ -24,11 +24,11 @@ class DataPreprocessing(DataPreparation):
         self.all_categorical_columns = self.categorical_columns.copy()
         self.all_categorical_columns.extend(self.numeric_categorical_columns)
 
-    def drop_errors(self, columns=list[str], value: str = 'error'):
+    def drop_errors(self, columns=list[str], value: str = "error"):
         for column in columns:
             self.drop_values(column=column, value=value)
 
-    def preparation_full_df(self, save_path: str | None = None, drop_value: str = 'error'):
+    def preparation_full_df(self, save_path: str | None = None, drop_value: str = "error"):
         """
         This method is responsible for preparing the full dataframe for further processing.
         It performs several operations such as dropping NA values, converting indices to integers,
@@ -45,29 +45,21 @@ class DataPreprocessing(DataPreparation):
 
         # Drop NA values from the dataframe
         self.drop_na()
-
         # Convert the index of the dataframe to integer
         self.index_as_int()
-
         # Drop duplicate rows from the dataframe
         self.drop_duplicates()
-
         self.drop_errors(value=drop_value)
         # Convert column names from camel case to snake case
         self.convert_from_camel_case_to_snake_case()
-
         # Convert 'job_start_date' and 'birth_date' columns to datetime
-        self.columns_to_datetime(columns=['job_start_date', 'birth_date'])
-
+        self.columns_to_datetime(columns=["job_start_date", "birth_date"])
         # Convert 'money_columns' to 'UInt64' data type
-        self.columns_to_type(columns=self.money_columns, dtype='UInt64')
-
+        self.columns_to_type(columns=self.money_columns, dtype="UInt64")
         # Convert 'numeric_cartegorical_columns' to 'UInt8' data type
-        self.columns_to_type(columns=self.numeric_categorical_columns, dtype='UInt8')
-
+        self.columns_to_type(columns=self.numeric_categorical_columns, dtype="UInt8")
         # Convert 'all_categorical_columns' to 'category' data type
-        self.columns_to_type(columns=self.all_categorical_columns, dtype='category')
-
+        self.columns_to_type(columns=self.all_categorical_columns, dtype="category")
         # If save_path is provided, save the dataframe to the specified path
         if save_path:
             self.save_df(path=save_path)
@@ -76,15 +68,15 @@ class DataPreprocessing(DataPreparation):
             return self.df
 
     def final_preparation(
-            self,
-            df: DataFrame | None = None,
-            save_path: str | None = None,
-            banks_cols_to_drop: list[str] | None = None,
-            condition_value: str = 'success',
-            multiplier: float = 1.5,
-            is_origin_time_column_drop=True,
-            ohe_columns: list[str] | None = None,
-            is_normalized: bool = True
+        self,
+        df: DataFrame | None = None,
+        save_path: str | None = None,
+        banks_cols_to_drop: list[str] | None = None,
+        condition_value: str = "success",
+        multiplier: float = 1.5,
+        is_origin_time_column_drop=True,
+        ohe_columns: list[str] | None = None,
+        is_normalized: bool = True,
     ):
         """
         This method is responsible for the final preparation of the dataframe. It performs several operations such as
@@ -112,29 +104,18 @@ class DataPreprocessing(DataPreparation):
             self.df = df
         if banks_cols_to_drop:
             self.banks_cols_to_drop = banks_cols_to_drop
-
         # Convert the index of the dataframe to integer
         self.index_as_int()
-
         # Drop specified columns from the dataframe
         self.drop_columns(columns=self.banks_cols_to_drop)
-
         # Remove outliers from all numeric columns based on the provided condition value and multiplier
-        self.remove_outliers_all_numeric_with_condition(
-            is_new=False,
-            condition_value=condition_value,
-            multiplier=multiplier
-        )
-
+        self.remove_outliers_all_numeric_with_condition(is_new=False, condition_value=condition_value, multiplier=multiplier)
         # Add time features to the dataframe and optionally drop the original time column
         self.add_time_features(is_drop=is_origin_time_column_drop)
-
         # One-hot encode specified columns or all categorical columns if no columns are specified
         self.ohe_categorical_columns(is_new=False, columns=ohe_columns)
-
         if is_normalized:
             self.normalize_numeric_features(is_new=False, columns=self.money_columns)
-
         # If save_path is provided, save the dataframe to the specified path
         if save_path:
             self.save_df(path=save_path)
@@ -143,34 +124,35 @@ class DataPreprocessing(DataPreparation):
             return self.df
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from os import path
-    from pandas import read_csv
-    from settings import DVC_PARAMS_FILE
-    from box import ConfigBox
     from pathlib import Path
 
+    from box import ConfigBox
+    from pandas import read_csv
     from ruamel.yaml import YAML
 
-    yaml = YAML(typ='safe')
+    from settings import DVC_PARAMS_FILE
+
+    yaml = YAML(typ="safe")
 
     params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
 
-    load_path = path.abspath(path.join(__file__, '../../../data/datasets/SF_Mandarin_dataset_ver3.csv'))
-    full_prepared_save_path = path.abspath(path.join(__file__, '../../../data/datasets/prepared_full.parquet'))
+    load_path = path.abspath(path.join(__file__, "../../../data/datasets/SF_Mandarin_dataset_ver3.csv"))
+    full_prepared_save_path = path.abspath(path.join(__file__, "../../../data/datasets/prepared_full.parquet"))
 
     categorical_columns = list(params.preprocess.categorical_columns)
     numeric_categorical_columns = list(params.preprocess.numeric_categorical_columns)
     money_columns = list(params.preprocess.money_columns)
 
-    banks_cols = [f'bank_{i}_decision' for i in ['a', 'b', 'c', 'd', 'e']]
+    banks_cols = [f"bank_{i}_decision" for i in ["a", "b", "c", "d", "e"]]
 
-    for i in ['a', 'b', 'c', 'd', 'e']:
-        target_bank_col = f'bank_{i}_decision'
+    for i in ["a", "b", "c", "d", "e"]:
+        target_bank_col = f"bank_{i}_decision"
         banks_to_drop = banks_cols.copy()
         banks_to_drop.remove(target_bank_col)
 
-        df = read_csv(load_path, index_col=0, sep=';')
+        df = read_csv(load_path, index_col=0, sep=";")
         dpp = DataPreprocessing(
             df=df.copy(),
             banks_cols_to_drop=banks_to_drop,
@@ -178,9 +160,8 @@ if __name__ == '__main__':
             banks_cols=banks_cols,
             categorical_columns=categorical_columns,
             numeric_categorical_columns=numeric_categorical_columns,
-            money_columns=money_columns
+            money_columns=money_columns,
         )
-        one_bank_prepared_save_path = path.abspath(
-            path.join(__file__, f'../../../data/datasets/prepared_bank_{i}.parquet'))
+        one_bank_prepared_save_path = path.abspath(path.join(__file__, f"../../../data/datasets/prepared_bank_{i}.parquet"))
         full_df = dpp.preparation_full_df()
         dpp.final_preparation(save_path=one_bank_prepared_save_path)
