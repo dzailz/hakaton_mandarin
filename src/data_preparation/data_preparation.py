@@ -156,7 +156,7 @@ class DataPreparation:
 
     def drop_columns(self, columns: list[str]) -> None:
         """
-        Drop the columns
+        Drop the columns (inplace)
         """
         self.df.drop(columns=columns, axis=1, inplace=True)
 
@@ -217,7 +217,7 @@ class DataPreparation:
             df.drop('job_start_date', inplace=True, axis=1)
             df.drop('birth_date', inplace=True, axis=1)
 
-    def fit_one_hot_encoder(self, df: DataFrame = None, columns: list[str] = None, save_model: bool = True,
+    def fit_one_hot_encoder(self, df: DataFrame = None, columns: list[str] = None, is_save_model: bool = True,
                             ohe_filename: str = 'ohe_model.pkl'):
         """
         Fit the one-hot encoder on the specified columns and save the model.
@@ -230,7 +230,7 @@ class DataPreparation:
         self.ohe_model.fit(df[columns])
 
         # Save the one-hot encoding model
-        if save_model:
+        if is_save_model:
             with open(Path(MODELS_FOLDER, ohe_filename), 'wb') as model_file:
                 pickle.dump(self.ohe_model, model_file)
 
@@ -264,7 +264,7 @@ class DataPreparation:
             self.df = df
 
     def ohe_categorical_columns(self, df: DataFrame = None, columns: list[str] = None,
-                                is_new: bool = True, save_model: bool = True, ohe_filename: str = 'ohe_model.pkl'):
+                                is_new: bool = True, is_save_model: bool = True, ohe_filename: str = 'ohe_model.pkl'):
         """
         One hot encode categorical columns
         if columns is None, then the default columns will be used
@@ -286,13 +286,13 @@ class DataPreparation:
         columns = columns or self.to_ohe_columns
 
         # Fit the one-hot encoder and save the model
-        self.fit_one_hot_encoder(df, columns, save_model, ohe_filename)
+        self.fit_one_hot_encoder(df, columns, is_save_model, ohe_filename)
 
         # Transform the DataFrame using the pre-fitted one-hot encoder
         self.transform_one_hot_encoder(df, columns, is_new)
 
     def fit_scaler(self, df: DataFrame | None = None, columns: list[str] | None = None,
-                   scaler_save_name: str | None = 'scaler.pkl', scaler_path: str | None = None):
+                   scaler_save_name: str | None = 'scaler.pkl', scaler_path: str | None = None, is_save: bool = True):
         """
         Fit the scaler on the specified columns.
         Save the scaler for later use.
@@ -303,17 +303,18 @@ class DataPreparation:
         if columns is None:
             columns = ['month_profit', 'month_expense', 'loan_amount']
         self.scaler.fit(df[columns])
-        pickle.dump(self.scaler, open(scaler_path, 'wb'))
+        if is_save:
+            pickle.dump(self.scaler, open(scaler_path, 'wb'))
 
     def normalize_numeric_features(self, df: DataFrame | None = None, columns: list[str] | None = None,
-                       is_new: bool = True):
+                                   is_new: bool = True, is_save: bool = True):
         """
         Transform the specified columns using the previously fitted scaler.
         """
         if df is None:
             df = self.df
         columns = columns or ['month_profit', 'month_expense', 'loan_amount']
-        self.fit_scaler()
+        self.fit_scaler(columns=columns, is_save=is_save)
         df[columns] = self.scaler.transform(df[columns])
         if is_new:
             self.normalized_df = df

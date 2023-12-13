@@ -1,76 +1,30 @@
-import pickle
-from pathlib import Path
+from fastapi import FastAPI, Response, status
 
-import pandas as pd
-from box import ConfigBox
-from fastapi import FastAPI
-
-from src.api.data_structures.BankDecisionInput import BankDecisionInput
-from src.data_preparation.data_preparation import DataPreparation
-from settings import MODELS_FOLDER, DVC_PARAMS_FILE
-from ruamel.yaml import YAML
-
-yaml = YAML(typ='safe')
-
-params = ConfigBox(yaml.load(open(Path(DVC_PARAMS_FILE))))
-
-categorical_columns = list(params.preprocess.categorical_columns)
-numeric_categorical_columns = list(params.preprocess.numeric_categorical_columns)
-money_columns = list(params.preprocess.money_columns)
-
-bank_names = [f'bank_{i}' for i in ['a', 'b', 'c', 'd', 'e']]
-models_names = [f"random_forest_100_bank_{i}.pkl" for i in ['a', 'b', 'c', 'd', 'e']]
-model_list = []
-model_name = "random_forest_100_bank_d.pkl"
-scaler_name = "scaler.pkl"
-ohe_model = "ohe_model.pkl"
-
-for name in models_names:
-    with open(Path(MODELS_FOLDER, name), "rb") as model_file:
-        model_list.append(pickle.load(model_file))
-
-with open(Path(MODELS_FOLDER, model_name), "rb") as model_file:
-    model = pickle.load(model_file)
-
-with open(Path(MODELS_FOLDER, scaler_name), "rb") as scaler_file:
-    scaler = pickle.load(scaler_file)
-
-with open(Path(MODELS_FOLDER, ohe_model), "rb") as model_file:
-    ohe_model = pickle.load(model_file)
-
+from src.api.data_structures.bank_decision import BankDecisionInput, BankDecisionOutput
+from src.api.data_structures.errors import InvalidInputError
+from src.api.data_structures.root import ModelAndTeamInfo
+from src.domain.main import predict
 
 app = FastAPI()
 
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return ModelAndTeamInfo()
 
 
-@app.post("/predict_bank_decision")
-def predict_bank_decision(data: BankDecisionInput):
-    # Convert input data to a DataFrame
-    input_data = pd.DataFrame([data.model_dump()])
-    # input_data = input_data.drop('position', axis=1)
-    dp = DataPreparation(df=input_data, ohe_model=ohe_model, scaler=scaler)
-    dp.index_as_int()
-    dp.columns_to_type(columns=numeric_categorical_columns, dtype='UInt8')
-    dp.columns_to_type(columns=money_columns, dtype='int64')
-    dp.transform_to_categorical(columns=categorical_columns + numeric_categorical_columns)
-    dp.add_time_features()
-
-    dp.transform_one_hot_encoder(is_new=False)
-    dp.df[money_columns] = scaler.transform(dp.df[money_columns])
-    dp.drop_columns(columns=['position'])
-    # Make predictions using the trained model
-    predictions = []
-    probas = []
-    for model in model_list:
-        prediction = model.predict(dp.df)
-        predictions.append(prediction[0])
-        probas.append(model.predict_proba(dp.df)[0][1])
-    # prediction = model.predict(dp.df)
-    # proba = model.predict_proba(dp.df)
-
-    # Return the prediction as a response
-    return {"prediction": predictions, "probability": probas}
+@app.post("/predict_bank_decision", response_model=BankDecisionOutput | InvalidInputError, status_code=status.HTTP_200_OK)
+def predict_bank_decision(data: BankDecisionInput, response: Response):
+    try:
+        result = predict(data=data.model_dump())
+        # Return the prediction as a response
+        return BankDecisionOutput(
+            bank_a=result['bank_a'],
+            bank_b=result['bank_b'],
+            bank_c=result['bank_c'],
+            bank_d=result['bank_d'],
+            bank_e=result['bank_e']
+        )
+    except (ValueError, TypeError) as e:
+        response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+        return InvalidInputError(error=str(e))

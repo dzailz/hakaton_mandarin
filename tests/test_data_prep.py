@@ -80,7 +80,7 @@ class TestDataPreparation:
 
     def test_normalize_numeric_features(self, lognormal_data_preparation):
         # Call the normalize_numeric_features method
-        lognormal_data_preparation.normalize_numeric_features(columns=['age', 'income'])
+        lognormal_data_preparation.normalize_numeric_features(columns=['age', 'income'], is_save=False)
 
         # Check if the numeric columns are normalized
         assert 'age' in lognormal_data_preparation.df.columns
@@ -107,7 +107,7 @@ class TestDataPreparation:
                 'bank': ['Bank1', 'Bank2', 'Bank3', 'Bank4']
                 }
         data_prep = DataPreparation(df=pd.DataFrame(data), to_drop_columns=[], target_bank_col='bank')
-        data_prep.ohe_categorical_columns()
+        data_prep.ohe_categorical_columns(is_save_model=False)
         # Check if the categorical columns are one-hot encoded
         assert 'education' not in data_prep.ohe_df.columns
         assert 'employment status' not in data_prep.ohe_df.columns
@@ -125,7 +125,7 @@ class TestDataPreparation:
         assert isinstance(data_prep.ohe_df, pd.DataFrame)
 
     def test_ohe_categorical_columns_custom_columns(self, normal_data_preparation):
-        normal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=True)
+        normal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=True, is_save_model=False)
 
         # Check if the custom categorical columns are one-hot encoded
         assert 'education' not in normal_data_preparation.ohe_df.columns
@@ -136,7 +136,7 @@ class TestDataPreparation:
         assert isinstance(normal_data_preparation.ohe_df, pd.DataFrame)
 
     def test_ohe_categorical_columns_existing_df(self, lognormal_data_preparation):
-        lognormal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=False)
+        lognormal_data_preparation.ohe_categorical_columns(columns=['education', 'bank_decision'], is_new=False, is_save_model=False)
 
         # Check if the categorical columns are one-hot encoded
         assert 'Education' not in lognormal_data_preparation.df.columns
