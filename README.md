@@ -26,7 +26,7 @@ poetry install
 
 ##  <span style="color:green;">Команда</span>  <span style="color:orange;">Мандаринки->Новый год</span>
 - <span style="color:green;">Слободчикова Екатерина Валерьевна</span> 
-  - <span style="color:orange;">Team leed, product manager</span>
+  - <span style="color:orange;">Team lead, product manager</span>
 - <span style="color:green;">Драгомирский Даглар Сарматович</span>  
   - <span style="color:orange;">NLP engineer, MLOps engineer</span>
 - <span style="color:green;">Катин Владимир Викторович</span> 
