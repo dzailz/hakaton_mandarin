@@ -80,7 +80,7 @@ class TestDataPreparation:
 
     def test_normalize_numeric_features(self, lognormal_data_preparation):
         # Call the normalize_numeric_features method
-        lognormal_data_preparation.normalize_numeric_features(columns=['age', 'income'])
+        lognormal_data_preparation.normalize_numeric_features(columns=['age', 'income'], is_save=False)
 
         # Check if the numeric columns are normalized
         assert 'age' in lognormal_data_preparation.df.columns
