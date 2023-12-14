@@ -1,0 +1,10 @@
+services:
+  mandarinas-hakaton:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8888

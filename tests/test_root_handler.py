@@ -7,7 +7,7 @@ client = TestClient(app)
 
 
 class TestRootEndpoint:
-    @pytest.mark.parametrize("param", ("model_name", "team_name", "description", "team_leader"))
+    @pytest.mark.parametrize("param", ("mlmodel_name", "team_name", "description", "team_leader"))
     def test_root_endpoint_returns_model_and_team_info(self, param):
         response = client.get("/")
         assert response.status_code == 200
@@ -17,7 +17,7 @@ class TestRootEndpoint:
     def test_root_endpoint_model_info_is_not_empty(self):
         response = client.get("/")
         assert response.status_code == 200
-        assert response.json()["model_name"] != ""
+        assert response.json()["mlmodel_name"] != ""
 
     def test_root_endpoint_team_info_is_not_empty(self):
         response = client.get("/")
