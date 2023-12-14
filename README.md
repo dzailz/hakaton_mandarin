@@ -1,7 +1,8 @@
-<h1 style="color: darkviolet; font-weight: bold;">CreditProphet</h1>
+<body>
+<h1 style="text-align: center; color: orange;">CreditProphet</h1>
 <p><span style="color: orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки на платформе <a href="https://mandarin.io/ru" style="color: orange; font-weight: bold;">Mandarin.</a></span></p>
 
-<p><span style="color: green; font-weight: bold;">Цель проекта:</span> Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса. В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.</p>
+<p style="color: green; font-weight: bold;"><span>Цель проекта:</span> Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса. В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.</p>
 <h2>Начало работы</h2>
 <p>При подготовке проекта использовался Python 3.11.0</p>
 
@@ -110,5 +111,9 @@
 <li><span style="color:green;">Зайцев Антон Александрович</span>
   - <span style="color:orange;">ML engineer</span></li>
 </ul>
-## Лицензия
-[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
+<h3>Лицензия</h3>
+<p>[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)</p>
+
+</body>
+
+</html>
