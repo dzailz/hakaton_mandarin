@@ -1,7 +1,7 @@
-# CreditProphet
-<span style="color:orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки</span>
+<span style="color: darkviolet; font-weight: bold;">CreditProphet</span>
+<span style="color: orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки на платформе <a href="https://mandarin.io/ru">Mandarin</a></span>
 
-<span style="color:green;">**Цель проекта:**</span>
+<span style="color: green; font-weight: bold;">Цель проекта:</span>
 Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса.
 
 В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.
