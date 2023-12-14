@@ -26,13 +26,13 @@ poetry install
 При подготовке проекта использовался python 3.11
 
 ROC auc
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/%20ROC%20auc.jpeg)
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
 
 Precision/recall
 ![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)
 
 Confusion matrix
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion%20matrix.jpeg)
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg)
 
 ```json
 {
