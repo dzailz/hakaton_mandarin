@@ -1,4 +1,4 @@
-<span style="color: darkviolet; font-weight: bold;">CreditProphet</span>
+<h1 style="color: darkviolet; font-weight: bold;">CreditProphet</h1>
 <span style="color: orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки на платформе <a href="https://mandarin.io/ru">Mandarin</a></span>
 
 <span style="color: green; font-weight: bold;">Цель проекта:</span>
