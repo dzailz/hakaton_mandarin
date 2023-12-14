@@ -1,6 +1,6 @@
 from typing import Any, Literal, Mapping, Sequence
 
-from imblearn.over_sampling import KMeansSMOTE
+from imblearn.over_sampling import ADASYN
 from pandas import DataFrame
 from sklearn.ensemble import RandomForestClassifier
 
@@ -90,6 +90,6 @@ class RandomForest(RandomForestClassifier):
         y = df[self.bank_decision]
 
         # Apply SMOTE
-        X_resampled, y_resampled = KMeansSMOTE(sampling_strategy="minority", n_jobs=-1, cluster_balance_threshold=0.15).fit_resample(X, y)
+        X_resampled, y_resampled = ADASYN().fit_resample(X, y)
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
