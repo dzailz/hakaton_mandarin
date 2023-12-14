@@ -91,9 +91,10 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }
 ```
 
-Модель базируется на [scikit-learn](https://scikit-learn.org/stable/)
+Модель базируется на scikit-learn
 [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html),
-для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.
+Для балансировки классов использовался [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html).
+Для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.
 
 ROC auc
 ![image](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
