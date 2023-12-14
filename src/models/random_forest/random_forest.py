@@ -1,6 +1,6 @@
 from typing import Any, Literal, Mapping, Sequence
 
-from imblearn.over_sampling import BorderlineSMOTE
+from imblearn.over_sampling import ADASYN
 from pandas import DataFrame
 from sklearn.ensemble import RandomForestClassifier
 
@@ -90,6 +90,6 @@ class RandomForest(RandomForestClassifier):
         y = df[self.bank_decision]
 
         # Apply SMOTE
-        X_resampled, y_resampled = BorderlineSMOTE(kind="borderline-1", k_neighbors=3).fit_resample(X, y)
+        X_resampled, y_resampled = ADASYN(n_neighbors=7, sampling_strategy="minority").fit_resample(X, y)
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
