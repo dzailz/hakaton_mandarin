@@ -7,32 +7,49 @@
 В качестве решения использовался метод бинарной классификации, для каждого банка по отдельности.
 
 ## Начало работы
-Для запуска проекта локально:
+При подготовке проекта использовался python 3.11.0
+### Для запуска проекта локально:
 ```shell
-git clone git@github.com:dzailz/hakaton_mandarin.git
+git clone git@github.com:dzailz/hakaton_mandarin.git && cd hakaton_mandarin
 ```
-- войти в терминал
-- войти в папку с репозиторием
-
-Войти в виртуальное окружение и установить необходимые библиотеки и зависимости (используется [poetry](https://python-poetry.org/docs/)):
+Для запуска проекта в docker (предварительно установить [docker](https://docs.docker.com/get-docker/)):
 ```shell
-poetry install
+docker compose up -d --build
+```
+### Разработка
+Для локальной разработки (предварительно установить [poetry](https://python-poetry.org/docs/#installation) использовался poetry 1.7.0):
+
+```shell
+poetry install --no-root --with=dev
 ```
 
 ## Использование
 На основе анализа объема данных с заданными параметрами, ML-модель оценивает возможность получения займа клиентом в конкретных банках. Результаты модели могут быть использованы для принятия решений о выдаче займов и оптимизации конверсии бизнеса.
 
-## Примеры ответа модели
-При подготовке проекта использовался python 3.11
-
-ROC auc
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
-
-Precision/recall
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)
-
-Confusion matrix
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg)
+При запуске из докера сервер будет доступен по адресу http://localhost:8888 или http://127.0.0.1:8888
+Swagger доступен по адресу http://localhost:8888/docs или http://127.0.0.1:8888/docs
+Проверить работоспособность можно с помощью команды:
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{
+    "birth_date": "1980-01-01",
+    "education": "Высшее - специалист",
+    "employment_status": "Работаю по найму полный рабочий день/служу",
+    "value": "10 и более лет",
+    "job_start_date": "2000-01-01",
+    "position": "Manager",
+    "month_profit": 1234567,
+    "month_expense": 9876543,
+    "gender": 1,
+    "family_status": "Никогда в браке не состоял(а)",
+    "child_count": 2,
+    "snils": 1,
+    "merch_code": 61,
+    "loan_amount": 8765432,
+    "loan_term": 12,
+    "goods_category": "Mobile_devices"
+}' http://localhost:8888/predict_bank_decision
+```
+## Пример ответа модели
 
 ```json
 {
@@ -73,6 +90,20 @@ Confusion matrix
   }
 }
 ```
+
+Модель базируется на [scikit-learn](https://scikit-learn.org/stable/)
+[RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html),
+для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.
+
+ROC auc
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
+
+Precision/recall
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)
+
+Confusion matrix
+![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg)
+
 
 ##  <span style="color:green;">Команда</span>  <span style="color:orange;">Мандаринки->Новый год</span>
 - <span style="color:green;">Слободчикова Екатерина Валерьевна</span>
