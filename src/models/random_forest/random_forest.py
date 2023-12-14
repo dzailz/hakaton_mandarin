@@ -90,6 +90,6 @@ class RandomForest(RandomForestClassifier):
         y = df[self.bank_decision]
 
         # Apply SMOTE
-        X_resampled, y_resampled = SVMSMOTE().fit_resample(X, y)
+        X_resampled, y_resampled = SVMSMOTE(sampling_strategy="minority").fit_resample(X, y)
         self.X_resampled = X_resampled
         self.y_resampled = y_resampled
