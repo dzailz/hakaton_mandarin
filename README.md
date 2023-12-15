@@ -1,36 +1,32 @@
-# CreditProphet
-<span style="color:orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа методом бинарной классификации</span>
+<body>
+<h1 style="text-align: center; color: orange;">CreditProphet</h1>
+<p><span style="color: orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки на платформе <a href="https://mandarin.io/ru" style="color: orange; font-weight: bold;">Mandarin.</a></span></p>
+<p style="color: green; font-weight: bold;"><span>Цель проекта:</span> Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса. В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.</p>
+<h2>Начало работы</h2>
+<p>При подготовке проекта использовался Python 3.11.0</p>
 
-<span style="color:green;">**Цель проекта:**</span>
-Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, выдать или отказать в выдаче займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса.
+<h3>Для запуска проекта локально:</h3>
+<pre>
+<code>git clone git@github.com:dzailz/hakaton_mandarin.git &amp;&amp; cd hakaton_mandarin</code>
+</pre>
 
-В качестве решения использовался метод бинарной классификации, для каждого банка по отдельности.
+<p>Для запуска проекта в Docker (предварительно установить <a href="https://docs.docker.com/get-docker/">docker</a>):</p>
+<pre>
+<code>docker compose up -d --build</code>
+</pre>
 
-## Начало работы
-При подготовке проекта использовался python 3.11.0
-### Для запуска проекта локально:
-```shell
-git clone git@github.com:dzailz/hakaton_mandarin.git && cd hakaton_mandarin
-```
-Для запуска проекта в docker (предварительно установить [docker](https://docs.docker.com/get-docker/)):
-```shell
-docker compose up -d --build
-```
-### Разработка
-Для локальной разработки (предварительно установить [poetry](https://python-poetry.org/docs/#installation) использовался poetry 1.7.0):
+<h3>Разработка</h3>
+<p>Для локальной разработки (предварительно установить <a href="https://python-poetry.org/docs/#installation">poetry</a>) использовался Poetry 1.7.0:</p>
+<pre>
+<code>poetry install --no-root --with=dev</code>
+</pre>
+<h2>Использование</h2>
+<p>На основе анализа объема данных с заданными параметрами, ML-модель оценивает возможность получения займа клиентом в конкретных банках. Результаты модели могут быть использованы для принятия решений о выдаче займов и оптимизации конверсии бизнеса.</p>
 
-```shell
-poetry install --no-root --with=dev
-```
-
-## Использование
-На основе анализа объема данных с заданными параметрами, ML-модель оценивает возможность получения займа клиентом в конкретных банках. Результаты модели могут быть использованы для принятия решений о выдаче займов и оптимизации конверсии бизнеса.
-
-При запуске из докера сервер будет доступен по адресу http://localhost:8888 или http://127.0.0.1:8888
-Swagger доступен по адресу http://localhost:8888/docs или http://127.0.0.1:8888/docs
-Проверить работоспособность можно с помощью команды:
-```shell
-curl -X POST -H "Content-Type: application/json" -d '{
+<p>При запуске из докера сервер будет доступен по адресу <a href="http://localhost:8888">http://localhost:8888</a> или <a href="http://127.0.0.1:8888">http://127.0.0.1:8888</a></p>
+<p>Swagger доступен по адресу <a href="http://localhost:8888/docs">http://localhost:8888/docs</a> или <a href="http://127.0.0.1:8888/docs">http://127.0.0.1:8888/docs</a></p>
+<p>Проверить работоспособность можно с помощью команды:</p>
+<pre><code>curl -X POST -H "Content-Type: application/json" -d '{
     "birth_date": "1980-01-01",
     "education": "Высшее - специалист",
     "employment_status": "Работаю по найму полный рабочий день/служу",
@@ -47,12 +43,10 @@ curl -X POST -H "Content-Type: application/json" -d '{
     "loan_amount": 8765432,
     "loan_term": 12,
     "goods_category": "Mobile_devices"
-}' http://localhost:8888/predict_bank_decision
-```
-## Пример ответа модели
+}' http://localhost:8888/predict_bank_decision</code></pre>
 
-```json
-{
+<h2>Пример ответа модели</h2>
+<pre><code>{
   "bank_a": {
     "prediction": "success",
     "probability": {
@@ -88,37 +82,37 @@ curl -X POST -H "Content-Type: application/json" -d '{
       "success": 0.78
     }
   }
-}
-```
+}</code></pre>
 
-Модель базируется на scikit-learn
-[RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html),
-Для балансировки классов использовался [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html).
-Для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.
+<p>Модель базируется на scikit-learn <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">RandomForestClassifier</a>. Для балансировки классов использовался <a href="https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html">SMOTE</a>. Для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.</p>
 
-ROC auc
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
+<p>ROC auc</p>
+<img src="https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg" alt="ROC auc">
 
-Precision/recall
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)
+<p>Precision/recall</p>
+<img src="https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg" alt="Precision/recall">
 
-Confusion matrix
-![image](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg)
+<p>Confusion matrix</p>
+<img src="https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg" alt="Confusion matrix">
 
+<h2><span style="color:green;">Команда</span>  <span style="color:orange;">Мандаринки->Новый год</span></h2>
+<ul>
+<li><span style="color:green;">Слободчикова Екатерина Валерьевна</span>
+  - <span style="color:orange;">Team lead, product manager</span></li>
+<li><span style="color:green;">Драгомирский Даглар Сарматович</span>
+  - <span style="color:orange;">NLP engineer, MLOps engineer</span></li>
+<li><span style="color:green;">Катин Владимир Викторович</span>
+  - <span style="color:orange;">Technical Lead, ML&MLOps engineer</span></li>
+<li><span style="color:green;">Орлов Александр Александрович</span>
+  - <span style="color:orange;">ML engineer</span></li>
+<li><span style="color:green;">Михайличенко Людмила Александровна</span>
+  - <span style="color:orange;">ML engineer, motivational speaker</span></li>
+<li><span style="color:green;">Зайцев Антон Александрович</span>
+  - <span style="color:orange;">ML engineer</span></li>
+</ul>
+<h3>Лицензия</h3>
+<p>[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)</p>
 
-##  <span style="color:green;">Команда</span>  <span style="color:orange;">Мандаринки->Новый год</span>
-- <span style="color:green;">Слободчикова Екатерина Валерьевна</span>
-  - <span style="color:orange;">Team lead, product manager</span>
-- <span style="color:green;">Драгомирский Даглар Сарматович</span>
-  - <span style="color:orange;">NLP engineer, MLOps engineer</span>
-- <span style="color:green;">Катин Владимир Викторович</span>
-  - <span style="color:orange;">Technical Lead, ML&MLOps engineer</span>
-- <span style="color:green;">Орлов Александр Александрович</span>
-  - <span style="color:orange;">ML engineer</span>
-- <span style="color:green;">Михайличенко Людмила Александровна</span>
-  - <span style="color:orange;">ML engineer, motivational speaker</span>
-- <span style="color:green;">Зайцев Антон Александрович</span>
-  - <span style="color:orange;">ML engineer</span>
+</body>
 
-## Лицензия
-[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
+</html>
