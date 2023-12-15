@@ -1,7 +1,5 @@
 <body>
-    <h1 style="color: orange;">CreditProphet<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=500&color=orange&width=435&lines=DeepFakeEvolution" alt="Typing SVG" /></a></h1>
-    
-
+<h1 style="text-align: center; color: orange;">CreditProphet</h1>
 <p><span style="color: orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки на платформе <a href="https://mandarin.io/ru" style="color: orange; font-weight: bold;">Mandarin.</a></span></p>
 
 <p style="color: green; font-weight: bold;"><span>Цель проекта:</span> Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса. В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.</p>
