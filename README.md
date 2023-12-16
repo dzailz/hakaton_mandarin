@@ -105,13 +105,13 @@ curl -X POST -H "Content-Type: application/json" -d '{
 The model is based on scikit-learn [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html). For class balancing, [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html) was used. To evaluate the quality of the model, roc_auc_score, precision_recall_curve, confusion_matrix were used.
 
 ROC auc
-![ROC auc](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
+![ROC auc](https://github.com/dzailz/hakaton_mandarin/misc/blob/main/ROC_auc.jpeg)
 
 Precision/recall
-![Precision/recall](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)
+![Precision/recall](https://github.com/dzailz/hakaton_mandarin/misc/blob/main/Precision_recall.jpeg)
 
 Confusion matrix
-![Confusion matrix](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg)
+![Confusion matrix](https://github.com/dzailz/hakaton_mandarin/misc/blob/main/Confusion_matrix.jpeg)
 
 ## Team Mandarin->New Year
 
