@@ -12,16 +12,16 @@ NUM_SAMPLES = 500
 
 
 @pytest.fixture()
-def normal_dist_income(num_samples: int = 500) -> np.ndarray:
+def normal_dist_income() -> np.ndarray:
     mean_income, std_dev_income = 250000, 100000
-    income_samples = np.clip(np.random.normal(mean_income, std_dev_income, num_samples), 10000, 500000)
+    income_samples = np.clip(np.random.normal(mean_income, std_dev_income, NUM_SAMPLES), 10000, 500000)
     return income_samples
 
 
 @pytest.fixture()
-def normal_dist_age(num_samples: int = 500) -> np.ndarray:
+def normal_dist_age() -> np.ndarray:
     mean_age, std_dev_age = 42, 10
-    age_samples = np.clip(np.random.normal(mean_age, std_dev_age, num_samples), 19, 65)
+    age_samples = np.clip(np.random.normal(mean_age, std_dev_age, NUM_SAMPLES), 19, 65)
     return age_samples
 
 
