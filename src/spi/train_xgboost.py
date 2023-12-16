@@ -16,7 +16,7 @@ from settings import (
     RESULTS_FOLDER,
 )
 from src.models.common.split import data_split
-from src.models.xgboost.xgboost import XGBoost
+from src.models.xg_boost.xg_boost import XGBoost
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
