@@ -6,7 +6,7 @@ markdown
 **Цель проекта:** Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса. В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.
 
 ## Начало работы
-При подготовке проекта использовался Python 3.11.0
+При подготовке проекта использовался Python 3.11
 
 ### Для запуска проекта локально:
 ```bash
@@ -88,7 +88,10 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }
 
 ```
-Модель базируется на scikit-learn [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html). Для балансировки классов использовался [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html). Для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.
+Модель базируется на scikit-learn [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html). Для балансировки классов использовался [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html). 
+
+Для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.
+
 ROC auc
 ![ROC auc](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
 
