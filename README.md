@@ -6,7 +6,7 @@ Development of an ML model for predicting the decision of a credit organization 
 
 ## Getting Started
 
-The project was prepared using Python 3.11.0
+The project was prepared using Python 3.11
 
 ### To run the project locally
 
