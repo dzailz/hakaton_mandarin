@@ -8,7 +8,7 @@ import pytest
 from src.api.data_structures.bank_decision import BankDecisionInput
 from src.data_preparation.data_preparation import DataPreparation
 
-#NUM_SAMPLES = 500
+NUM_SAMPLES = 500
 
 
 @pytest.fixture()
@@ -16,6 +16,7 @@ def normal_dist_income(num_samples: int = 500) -> np.ndarray:
     mean_income, std_dev_income = 250000, 100000
     income_samples = np.clip(np.random.normal(mean_income, std_dev_income, num_samples), 10000, 500000)
     return income_samples
+
 
 @pytest.fixture()
 def normal_dist_age(num_samples: int = 500) -> np.ndarray:
