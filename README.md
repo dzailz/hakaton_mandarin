@@ -1,52 +1,68 @@
-<body>
-<h1 style="text-align: center; color: orange;">CreditProphet</h1>
-<p><span style="color: orange;">Разработка ML-модели по предсказанию решения кредитной организации при оформлении займа/рассрочки на платформе <a href="https://mandarin.io/ru" style="color: orange; font-weight: bold;">Mandarin.</a></span></p>
-<p style="color: green; font-weight: bold;"><span>Цель проекта:</span> Реализовать модель машинного обучения, которая сможет прогнозировать решение кредитной организации, вероятность одобрения займа, построенная на основе обезличенных данных, для повышения конверсии бизнеса. В качестве решения использовался алгоритм машинного обучения RandomForest c SMOTE (Synthetic Minority Oversampling Technique) — методом синтетической избыточной выборки меньшинства для каждого банка по отдельности.</p>
-<h2>Начало работы</h2>
-<p>При подготовке проекта использовался Python 3.11.0</p>
+# Model name: CreditProphet
 
-<h3>Для запуска проекта локально:</h3>
-<pre>
-<code>git clone git@github.com:dzailz/hakaton_mandarin.git &amp;&amp; cd hakaton_mandarin</code>
-</pre>
+Development of an ML model for predicting the decision of a credit organization when applying for a loan/installment on the platform [Mandarin](https://mandarin.io/ru).
 
-<p>Для запуска проекта в Docker (предварительно установить <a href="https://docs.docker.com/get-docker/">docker</a>):</p>
-<pre>
-<code>docker compose up -d --build</code>
-</pre>
+**Project goal:** Implement a machine learning model that can predict the decision of a credit organization, the probability of loan approval, based on anonymized data, to increase business conversion. The solution used was the RandomForest machine learning algorithm with SMOTE (Synthetic Minority Oversampling Technique) - a synthetic minority oversampling method for each bank separately.
 
-<h3>Разработка</h3>
-<p>Для локальной разработки (предварительно установить <a href="https://python-poetry.org/docs/#installation">poetry</a>) использовался Poetry 1.7.0:</p>
-<pre>
-<code>poetry install --no-root --with=dev</code>
-</pre>
-<h2>Использование</h2>
-<p>На основе анализа объема данных с заданными параметрами, ML-модель оценивает возможность получения займа клиентом в конкретных банках. Результаты модели могут быть использованы для принятия решений о выдаче займов и оптимизации конверсии бизнеса.</p>
+## Getting Started
 
-<p>При запуске из докера сервер будет доступен по адресу <a href="http://localhost:8888">http://localhost:8888</a> или <a href="http://127.0.0.1:8888">http://127.0.0.1:8888</a></p>
-<p>Swagger доступен по адресу <a href="http://localhost:8888/docs">http://localhost:8888/docs</a> или <a href="http://127.0.0.1:8888/docs">http://127.0.0.1:8888/docs</a></p>
-<p>Проверить работоспособность можно с помощью команды:</p>
-<pre><code>curl -X POST -H "Content-Type: application/json" -d '{
-    "birth_date": "1980-01-01",
-    "education": "Высшее - специалист",
-    "employment_status": "Работаю по найму полный рабочий день/служу",
-    "value": "10 и более лет",
-    "job_start_date": "2000-01-01",
-    "position": "Manager",
-    "month_profit": 1234567,
-    "month_expense": 9876543,
-    "gender": 1,
-    "family_status": "Никогда в браке не состоял(а)",
-    "child_count": 2,
-    "snils": 1,
-    "merch_code": 61,
-    "loan_amount": 8765432,
-    "loan_term": 12,
-    "goods_category": "Mobile_devices"
-}' http://localhost:8888/predict_bank_decision</code></pre>
+The project was prepared using Python 3.11.0
 
-<h2>Пример ответа модели</h2>
-<pre><code>{
+### To run the project locally
+
+```bash
+git clone git@github.com:dzailz/hakaton_mandarin.git && cd hakaton_mandarin
+```
+
+To run the project in Docker (pre-install [docker](https://docs.docker.com/get-docker/)):
+
+```bash
+docker compose up -d --build
+```
+
+### Development
+
+For local development (pre-install [poetry](https://python-poetry.org/docs/#installation)), Poetry 1.7.0 was used:
+
+```bash
+poetry install --no-root --with=dev
+```
+
+## Usage
+
+Based on the analysis of the volume of data with the specified parameters, the ML model assesses the possibility of the client receiving a loan in specific banks. The results of the model can be used to make decisions about issuing loans and optimizing business conversion.
+
+When launched from docker, the server will be available at [http://localhost:8888](http://localhost:8888) or [http://127.0.0.1:8888](http://127.0.0.1:8888)
+
+Swagger is available at [http://localhost:8888/docs](http://localhost:8888/docs) or [http://127.0.0.1:8888/docs](http://127.0.0.1:8888/docs)
+
+You can check the performance with the command:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{
+  "birth_date": "1980-01-01",
+  "education": "Высшее - специалист",
+  "employment_status": "Работаю по найму полный рабочий день/служу",
+  "value": "10 и более лет",
+  "job_start_date": "2000-01-01",
+  "position": "Manager",
+  "month_profit": 1234567,
+  "month_expense": 9876543,
+  "gender": 1,
+  "family_status": "Никогда в браке не состоял(а)",
+  "child_count": 2,
+  "snils": 1,
+  "merch_code": 61,
+  "loan_amount": 8765432,
+  "loan_term": 12,
+  "goods_category": "Mobile_devices"
+}' http://localhost:8888/predict_bank_decision
+```
+
+## Example of model response
+
+```json
+{
   "bank_a": {
     "prediction": "success",
     "probability": {
@@ -82,37 +98,30 @@
       "success": 0.78
     }
   }
-}</code></pre>
+}
 
-<p>Модель базируется на scikit-learn <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">RandomForestClassifier</a>. Для балансировки классов использовался <a href="https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html">SMOTE</a>. Для оценки качества модели использовался roc_auc_score, precision_recall_curve, confusion_matrix.</p>
+```
 
-<p>ROC auc</p>
-<img src="https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg" alt="ROC auc">
+The model is based on scikit-learn [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html). For class balancing, [SMOTE](https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html) was used. To evaluate the quality of the model, roc_auc_score, precision_recall_curve, confusion_matrix were used.
 
-<p>Precision/recall</p>
-<img src="https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg" alt="Precision/recall">
+ROC auc
+![ROC auc](https://github.com/dzailz/hakaton_mandarin/blob/main/ROC_auc.jpeg)
 
-<p>Confusion matrix</p>
-<img src="https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg" alt="Confusion matrix">
+Precision/recall
+![Precision/recall](https://github.com/dzailz/hakaton_mandarin/blob/main/Precision_recall.jpeg)
 
-<h2><span style="color:green;">Команда</span>  <span style="color:orange;">Мандаринки->Новый год</span></h2>
-<ul>
-<li><span style="color:green;">Слободчикова Екатерина Валерьевна</span>
-  - <span style="color:orange;">Team lead, product manager</span></li>
-<li><span style="color:green;">Драгомирский Даглар Сарматович</span>
-  - <span style="color:orange;">NLP engineer, MLOps engineer</span></li>
-<li><span style="color:green;">Катин Владимир Викторович</span>
-  - <span style="color:orange;">Technical Lead, ML&MLOps engineer</span></li>
-<li><span style="color:green;">Орлов Александр Александрович</span>
-  - <span style="color:orange;">ML engineer</span></li>
-<li><span style="color:green;">Михайличенко Людмила Александровна</span>
-  - <span style="color:orange;">ML engineer, motivational speaker</span></li>
-<li><span style="color:green;">Зайцев Антон Александрович</span>
-  - <span style="color:orange;">ML engineer</span></li>
-</ul>
-<h3>Лицензия</h3>
-<p>[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)</p>
+Confusion matrix
+![Confusion matrix](https://github.com/dzailz/hakaton_mandarin/blob/main/Confusion_matrix.jpeg)
 
-</body>
+## Team Mandarin->New Year
 
-</html>
+- Ekaterina Valeryevna Slobodchikova - Team lead, product manager
+- Daglar Sarmatovich Dragomirsky - NLP engineer, MLOps engineer
+- Vladimir Viktorovich Katin - Technical Lead, ML&MLOps engineer
+- Alexander Alexandrovich Orlov - ML engineer
+- Lyudmila Alexandrovna Mikhailichenko - ML engineer, motivational speaker
+- Anton Alexandrovich Zaitsev - ML engineer
+
+### License
+
+[GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
